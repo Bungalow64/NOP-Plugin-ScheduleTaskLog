@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Plugins\Nop.Plugin.Admin.ScheduleTaskLog\Nop.Plugin.Admin.ScheduleTaskLog.csproj" />
+    <ProjectReference Include="..\..\src\Nop.Plugin.Admin.ScheduleTaskLog.csproj" />
   </ItemGroup>
 
 </Project>
