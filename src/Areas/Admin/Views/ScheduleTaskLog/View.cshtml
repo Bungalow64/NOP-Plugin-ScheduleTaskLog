@@ -1,0 +1,149 @@
+@using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
+
+@model ScheduleLogModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Plugins.Admin.ScheduleTaskLog.ListViewTitle").Text;
+    Html.SetActiveMenuItemSystemName("ScheduleTaskLogList");
+}
+
+<div class="content-header clearfix">
+    <h1 class="float-left">
+        @T("Plugins.Admin.ScheduleTaskLog.ListViewTitle")
+        <small>
+            <i class="fas fa-arrow-circle-left"></i>
+            <a asp-action="List">@T("Plugins.Admin.ScheduleTaskLog.BackToList")</a>
+        </small>
+    </h1>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="cards-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="TaskName" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.TaskName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="EventStartDateUtc" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.EventStartDateUtc</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="EventEndDateUtc" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.EventEndDateUtc</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="TotalMilliseconds" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">@Model.TotalMilliseconds</div>
+                            </div>
+                        </div>
+                        @if (@Model.TimeAgainstAverage.HasValue)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="TimeAgainstAverage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">
+                                        @if (Model.TimeAgainstAverage > 0)
+                                        {
+                                            <span class="text-red"><i class="icon fas fa-caret-up"></i> @Math.Round(@Model.TimeAgainstAverage.Value, 2)%</span>
+                                        }
+                                        else if (Model.TimeAgainstAverage < 0)
+                                        {
+                                            <span class="text-green"><i class="icon fas fa-caret-down"></i> @Math.Round(@Model.TimeAgainstAverage.Value, 2)%</span>
+                                        }
+                                        else
+                                        {
+                                            <span><i class="icon fas fa-caret-right"></i> @Math.Round(@Model.TimeAgainstAverage.Value, 2)%</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="IsStartedManually" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (Model.IsStartedManually)
+                                    {
+                                        var email = Model.TriggeredByCustomerEmail;
+                                        if (!string.IsNullOrEmpty(email))
+                                        {
+                                            <span class="text-red"><i class="icon fas fa-user-plus"></i> @T("Plugins.Admin.ScheduleTaskLog.ByUser") (@email)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-red"><i class="icon fas fa-user-plus"></i> @T("Plugins.Admin.ScheduleTaskLog.ByUser") (@T("Plugins.Admin.ScheduleTaskLog.UnknownUser"))</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-green"><i class="icon fas fa-clock"></i> @T("Plugins.Admin.ScheduleTaskLog.ByScheduler")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="IsError" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-text-row">
+                                    @if (Model.IsError)
+                                    {
+                                        <span class="text-red"><i class="icon fas fa-exclamation-triangle"></i> @T("Plugins.Admin.ScheduleTaskLog.Error")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-green"><i class="icon fas fa-check"></i> @T("Plugins.Admin.ScheduleTaskLog.Success")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.IsError)
+                        {
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ExceptionMessage" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.ExceptionMessage</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-label asp-for="ExceptionDetails" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-text-row">@Model.ExceptionDetails</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

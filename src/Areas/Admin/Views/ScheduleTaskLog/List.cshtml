@@ -1,0 +1,205 @@
+@using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
+
+@model ScheduleLogSearchModel
+@{
+    Layout = "_AdminLayout";
+    ViewBag.PageTitle = T("Plugins.Admin.ScheduleTaskLog.ListTitle").Text;
+    Html.SetActiveMenuItemSystemName("ScheduleTaskLogList");
+    const string hideSearchBlockAttributeName = "ScheduleTaskLogPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="ScheduleTaskLog" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Plugins.Admin.ScheduleTaskLog.ListTitle")
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List" asp-controller="ScheduleTask">@T("Plugins.Admin.ScheduleTaskLog.BackToTaskList")</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" id="clearall" name="clearall" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+                @T("Admin.System.Log.ClearLog")
+            </button>
+            <nop-action-confirmation asp-button-id="clearall" asp-action="ClearAll" />
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : "")" data-hideAttribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-search" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                            </div>
+
+                            <div class="search-body @(hideSearchBlock ? "closed" : "")">
+
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="StartedOnFrom" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="StartedOnFrom" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="StartedOnTo" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-editor asp-for="StartedOnTo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="ScheduleTaskId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="ScheduleTaskId" asp-items="Model.AvailableScheduleTasks" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="StateId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="StateId" asp-items="Model.AvailableStates" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <nop-label asp-for="TriggerTypeId" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="TriggerTypeId" asp-items="Model.AvailableTriggerTypes" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-schedule-task-log" class="btn btn-primary btn-search">
+                                            <i class="fas fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                       {
+                           Name = "schedule-task-log-grid",
+                           UrlRead = new DataUrl("LogList", "ScheduleTaskLog", null),
+                           SearchButtonId = "search-schedule-task-log",
+                           Length = Model.PageSize,
+                           LengthMenu = Model.AvailablePageSizes,
+                           Filters = new List<FilterParameter>
+                            {
+                                new FilterParameter(nameof(Model.StartedOnFrom)),
+                                new FilterParameter(nameof(Model.StartedOnTo)),
+                                new FilterParameter(nameof(Model.ScheduleTaskId)),
+                                new FilterParameter(nameof(Model.StateId)),
+                                new FilterParameter(nameof(Model.TriggerTypeId))
+                            },
+                           ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(ScheduleLogModel.TaskName))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.TaskName").Text
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.IsStartedManually))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.TriggerType").Text,
+                                        Render = new RenderCustom("isStartedManually")
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.IsError))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.TaskStatus").Text,
+                                        Render = new RenderCustom("isErrorIcon")
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.EventStartDateUtc))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.StartDate").Text,
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.EventEndDateUtc))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.EndDate").Text,
+                                        Render = new RenderDate()
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.TotalMilliseconds))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.TotalMilliseconds").Text
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.TimeAgainstAverage))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.TimeAgainstAverage").Text,
+                                        Render = new RenderCustom("isPositiveChange")
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.ExceptionMessage))
+                                    {
+                                        Title = T("Plugins.Admin.ScheduleTaskLog.ExceptionMessage").Text
+                                    },
+                                    new ColumnProperty(nameof(ScheduleLogModel.Id))
+                                    {
+                                        Title = T("Admin.Common.View").Text,
+                                        ClassName =  NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonView(new DataUrl("View"))
+                                    }
+                                }
+                       })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+<script>
+    function isErrorIcon(data) {
+        if (data) {
+            return "<span class=\"text-red\"><i class=\"icon fas fa-exclamation-triangle\"></i> @T("Plugins.Admin.ScheduleTaskLog.Error")</span>";
+        }
+        return "<span class=\"text-green\"><i class=\"icon fas fa-check\"></i> @T("Plugins.Admin.ScheduleTaskLog.Success")</span>";
+    }
+    function isStartedManually(data, type, row) {
+        if (data) {
+            var email = row.TriggeredByCustomerEmail;
+            if (!email) {
+                email = "@T("Plugins.Admin.ScheduleTaskLog.UnknownUser")";
+            }
+
+            return "<span class=\"text-red\"><i class=\"icon fas fa-user-plus\"></i> @T("Plugins.Admin.ScheduleTaskLog.ByUser") (" + email + ")</span>";
+        }
+        return "<span class=\"text-green\"><i class=\"icon fas fa-clock\"></i> @T("Plugins.Admin.ScheduleTaskLog.ByScheduler")</span>";
+    }
+    function isPositiveChange(data) {
+        var colourClass = "";
+        var icon = "";
+        if (data > 0) {
+            colourClass = "text-red";
+            icon = "fa-caret-up";
+        } else if (data < 0) {
+            colourClass = "text-green";
+            icon = "fa-caret-down";
+        } else {
+            colourClass = "";
+            icon = "fa-caret-right";
+        }
+        return "<span class=\"" + colourClass + "\"><i class=\"icon fas " + icon + "\"></i> " + data.toFixed(2) + "%</span>";
+    }
+</script>
