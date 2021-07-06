@@ -26,12 +26,12 @@ steps:
 
 - script: dir $(Build.SourcesDirectory)
 
-#- task: DotNetCoreCLI@2
-#  inputs:
-#    command: 'build'
-#    projects: '$(Build.SourcesDirectory)/NOP-4.30/**/*.sln'
-#    arguments: '--configuration $(buildConfiguration)'
-#  displayName: 'dotnet build $(buildConfiguration) - NOP 4.30'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '$(Build.SourcesDirectory)/NOP-4.30/**/*.sln'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration) - NOP 4.30'
 
 #- task: DotNetCoreCLI@2
 #  inputs:
@@ -43,9 +43,10 @@ steps:
 - script: echo $(Build.SourcesDirectory)
 - script: echo $(Build.ArtifactStagingDirectory)
 
-- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
+#- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
+- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)\NOP-4.30\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\' -recurse
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.30\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.30\Admin.ScheduleTaskLog' -Recurse
-- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.40\src\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.40\Admin.ScheduleTaskLog' -Recurse
+#- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.40\src\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.40\Admin.ScheduleTaskLog' -Recurse
 
-- powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
+#- powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
