@@ -8,6 +8,10 @@ resources:
      type: github
      endpoint: Bungalow64
      name: Bungalow64/NOP-4.30
+   - repository: Plugin
+     type: github
+     endpoint: Bungalow64
+     name: Bungalow64/NOP-Plugin-ScheduleTaskLog
 
 trigger:
 - main
@@ -19,6 +23,7 @@ pool:
  vmImage: 'ubuntu-latest'
 
 steps:
+- checkout: Plugin
 - checkout: NOP_4_40
   submodules: true
 - checkout: NOP_4_30
