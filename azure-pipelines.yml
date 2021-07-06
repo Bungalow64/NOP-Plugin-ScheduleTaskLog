@@ -27,7 +27,7 @@ steps:
 - script: dir $(Build.SourcesDirectory)
 
 - powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
-- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)\NOP-4.30 -recurse
+- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)\NOP-4.30' -recurse
 
 - task: DotNetCoreCLI@2
   inputs:
