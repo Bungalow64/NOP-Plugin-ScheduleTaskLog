@@ -24,7 +24,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models
         [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.ExceptionDetails")]
         public string ExceptionDetails { get; set; }
 
-        [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.TimeTaken")]
+        [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.TotalMilliseconds")]
         public long? TotalMilliseconds { get; set; }
 
         [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.TimeAgainstAverage")]
