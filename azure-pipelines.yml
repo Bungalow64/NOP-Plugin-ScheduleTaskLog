@@ -23,4 +23,4 @@ steps:
 
 - script: dir $(Build.SourcesDirectory)
 
-- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory) -recurse
+- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
