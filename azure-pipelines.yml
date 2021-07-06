@@ -42,7 +42,7 @@ steps:
   
 - powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
 
-- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.30\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.30\Admin.ScheduleTaskLog\' -Recurse
-- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.40\src\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.40\Admin.ScheduleTaskLog\' -Recurse
+- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.30\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.30\Admin.ScheduleTaskLog' -Recurse
+- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.40\src\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.40\Admin.ScheduleTaskLog' -Recurse
 
 - powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
