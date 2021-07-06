@@ -27,7 +27,6 @@ steps:
 - script: dir $(Build.SourcesDirectory)
 
 - powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
-- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)\NOP-4.30' -recurse
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -36,11 +35,11 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.30'
 
-#- task: DotNetCoreCLI@2
-#  inputs:
-#    command: 'build'
-#    projects: '$(Build.SourcesDirectory)/NOP-4.40/**/*.sln'
-#    arguments: '--configuration $(buildConfiguration)'
-#  displayName: 'dotnet build $(buildConfiguration) - NOP 4.40'
-#  
-#- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '$(Build.SourcesDirectory)/NOP-4.40/**/*.sln'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration) - NOP 4.40'
+  
+- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
