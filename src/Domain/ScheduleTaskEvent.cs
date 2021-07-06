@@ -73,7 +73,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Domain
                 throw new ArgumentNullException(nameof(scheduleTask));
             }
 
-            return new()
+            return new ScheduleTaskEvent()
             {
                 ScheduleTaskId = scheduleTask.Id,
                 EventStartDateUtc = currentDateTimeHelper.UtcNow
@@ -118,7 +118,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Domain
                 throw new ArgumentNullException(nameof(currentDateTimeHelper));
             }
 
-            if (ex is not null)
+            if (!(ex is null))
             {
                 ExceptionMessage = Truncate(ex.Message, 200);
                 ExceptionDetails = ex.ToString();

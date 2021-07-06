@@ -12,9 +12,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tasks
             _scheduleTaskEventService = scheduleTaskEventService;
         }
 
-        public System.Threading.Tasks.Task ExecuteAsync()
+        public void Execute()
         {
-            return _scheduleTaskEventService.PruneEventsAsync();
+            _scheduleTaskEventService.PruneEvents();
         }
     }
 }

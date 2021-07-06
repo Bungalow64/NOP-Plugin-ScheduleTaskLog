@@ -35,7 +35,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
         #region Ctor
 
         public ScheduleTaskLogPlugin(
-            ILocalizationService localizationService, 
+            ILocalizationService localizationService,
             WidgetSettings widgetSettings,
             ISettingService settingService,
             IScheduleTaskService scheduleTaskService,
@@ -64,15 +64,15 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
         /// Install the plugin
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public override async Task InstallAsync()
+        public override void Install()
         {
-            await _settingService.SaveSettingAsync(new ScheduleTaskLogSettings
+            _settingService.SaveSetting(new ScheduleTaskLogSettings
             {
                 DisableLog = false,
                 LogExpiryDays = 14
             });
 
-            await _localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
+            _localizationService.AddPluginLocaleResource(new Dictionary<string, string>
             {
                 ["Plugins.Admin.ScheduleTaskLog.ListTitle"] = "Schedule task log",
                 ["Plugins.Admin.ScheduleTaskLog.ListViewTitle"] = "Schedule task log entry",
@@ -117,12 +117,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
             if (!_widgetSettings.ActiveWidgetSystemNames.Contains(ScheduleTaskLogPluginDefaults.WIDGETS_SCHEDULE_TASK_LOG_BUTTON_NAME))
             {
                 _widgetSettings.ActiveWidgetSystemNames.Add(ScheduleTaskLogPluginDefaults.WIDGETS_SCHEDULE_TASK_LOG_BUTTON_NAME);
-                await _settingService.SaveSettingAsync(_widgetSettings);
+                _settingService.SaveSetting(_widgetSettings);
             }
 
-            if (await _scheduleTaskService.GetTaskByTypeAsync(ScheduleTaskLogPluginDefaults.PRUNE_TASK_TYPE) == null)
+            if (_scheduleTaskService.GetTaskByType(ScheduleTaskLogPluginDefaults.PRUNE_TASK_TYPE) == null)
             {
-                await _scheduleTaskService.InsertTaskAsync(new ScheduleTask
+                _scheduleTaskService.InsertTask(new ScheduleTask
                 {
                     Enabled = true,
                     Seconds = ScheduleTaskLogPluginDefaults.DEFAULT_PRUNE_PERIOD_HOURS * 60 * 60,
@@ -131,12 +131,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
                 });
             }
 
-            await base.InstallAsync();
+            base.Install();
         }
 
-        public override async Task UpdateAsync(string currentVersion, string targetVersion)
+        public override void Update(string currentVersion, string targetVersion)
         {
-            await _localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
+            _localizationService.AddPluginLocaleResource(new Dictionary<string, string>
             {
                 ["Plugins.Admin.ScheduleTaskLog.ListTitle"] = "Schedule task log",
                 ["Plugins.Admin.ScheduleTaskLog.ListViewTitle"] = "Schedule task log entry",
@@ -178,37 +178,37 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
                 ["Plugins.Admin.ScheduleTaskLog.Configuration.LogExpiryDays.MustBePositive"] = "The log expiry must be greater than 0"
             });
 
-            await base.UpdateAsync(currentVersion, targetVersion);
+            base.Update(currentVersion, targetVersion);
         }
 
         /// <summary>
         /// Uninstall the plugin
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public override async Task UninstallAsync()
+        public override void Uninstall()
         {
             if (_widgetSettings.ActiveWidgetSystemNames.Contains(ScheduleTaskLogPluginDefaults.WIDGETS_SCHEDULE_TASK_LOG_BUTTON_NAME))
             {
                 _widgetSettings.ActiveWidgetSystemNames.Remove(ScheduleTaskLogPluginDefaults.WIDGETS_SCHEDULE_TASK_LOG_BUTTON_NAME);
-                await _settingService.SaveSettingAsync(_widgetSettings);
+                _settingService.SaveSetting(_widgetSettings);
             }
 
-            var task = await _scheduleTaskService.GetTaskByTypeAsync(ScheduleTaskLogPluginDefaults.PRUNE_TASK_TYPE);
-            if (task is not null)
+            var task = _scheduleTaskService.GetTaskByType(ScheduleTaskLogPluginDefaults.PRUNE_TASK_TYPE);
+            if (!(task is null))
             {
-                await _scheduleTaskService.DeleteTaskAsync(task);
+                _scheduleTaskService.DeleteTask(task);
             }
 
-            await _settingService.DeleteSettingAsync<ScheduleTaskLogSettings>();
+            _settingService.DeleteSetting<ScheduleTaskLogSettings>();
 
-            await _localizationService.DeleteLocaleResourcesAsync("Plugins.Admin.ScheduleTaskLog");
+            _localizationService.DeletePluginLocaleResources("Plugins.Admin.ScheduleTaskLog");
 
-            await base.UninstallAsync();
+            base.Uninstall();
         }
 
-        public Task<IList<string>> GetWidgetZonesAsync()
+        public IList<string> GetWidgetZones()
         {
-            return Task.FromResult<IList<string>>(new List<string> { AdminWidgetZones.ScheduleTaskListButtons });
+            return new List<string> { AdminWidgetZones.ScheduleTaskListButtons };
         }
 
         public string GetWidgetViewComponentName(string widgetZone)

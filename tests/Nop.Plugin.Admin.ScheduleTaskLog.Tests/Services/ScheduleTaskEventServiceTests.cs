@@ -53,8 +53,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Returns(14);
 
             _dateTimeHelper
-                .Setup(p => p.ConvertToUserTimeAsync(It.IsAny<DateTime>(), DateTimeKind.Utc))
-                .Returns<DateTime, DateTimeKind>((p, q) => Task.FromResult(p));
+                .Setup(p => p.ConvertToUserTime(It.IsAny<DateTime>(), DateTimeKind.Utc))
+                .Returns<DateTime, DateTimeKind>((p, q) => p);
 
             _currentDateTimeHelper.SetupGet(p => p.UtcNow).Returns(DateTime.UtcNow);
 
@@ -80,21 +80,21 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
         }
 
         [Test]
-        public async Task GetScheduleTaskEventByIdAsync_NoItemFound_ReturnNull()
+        public void GetScheduleTaskEventById_NoItemFound_ReturnNull()
         {
             const int id = 1001;
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
-                .ReturnsAsync((ScheduleTaskEvent)null);
+                .Setup(p => p.GetById(id))
+                .Returns((ScheduleTaskEvent)null);
 
-            var result = await Create().GetScheduleTaskEventByIdAsync(id);
+            var result = Create().GetScheduleTaskEventById(id);
 
             Assert.Null(result);
         }
 
         [Test]
-        public async Task GetScheduleTaskEventByIdAsync_ValidObject_ReturnFullDetails()
+        public void GetScheduleTaskEventById_ValidObject_ReturnFullDetails()
         {
             const int id = 1001;
             const int scheduleTaskId1 = 2001;
@@ -131,12 +131,20 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             };
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
-                    .ReturnsAsync(scheduleTaskEvent);
+                .Setup(p => p.GetById(id))
+                    .Returns(scheduleTaskEvent);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
-                    .ReturnsAsync(scheduleTasks);
+                .Setup(p => p.GetById(scheduleTaskId1))
+                    .Returns(scheduleTasks[0]);
+
+            _scheduleTaskRepository
+                .Setup(p => p.GetById(scheduleTaskId2))
+                    .Returns(scheduleTasks[1]);
+
+            _scheduleTaskRepository
+                .SetupGet(p => p.Table)
+                    .Returns(scheduleTasks.AsQueryable());
 
             _scheduleTaskEventRepository
                 .SetupGet(p => p.Table)
@@ -146,7 +154,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .SetupGet(p => p.UtcNow)
                 .Returns(DateTime.Parse("04-Mar-2021"));
 
-            var result = await Create().GetScheduleTaskEventByIdAsync(id);
+            var result = Create().GetScheduleTaskEventById(id);
 
             Assert.NotNull(result);
             Assert.AreEqual(id, result.Id);
@@ -159,7 +167,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
         }
 
         [Test]
-        public async Task GetScheduleTaskEventByIdAsync_IsError_ReturnErrorDetails()
+        public void GetScheduleTaskEventById_IsError_ReturnErrorDetails()
         {
             const int id = 1001;
             const int scheduleTaskId1 = 2001;
@@ -191,18 +199,22 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             };
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
-                    .ReturnsAsync(scheduleTaskEvent);
+                .Setup(p => p.GetById(id))
+                    .Returns(scheduleTaskEvent);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
-                    .ReturnsAsync(scheduleTasks);
+                .Setup(p => p.GetById(scheduleTaskId1))
+                    .Returns(scheduleTasks[0]);
+
+            _scheduleTaskRepository
+                .SetupGet(p => p.Table)
+                    .Returns(scheduleTasks.AsQueryable());
 
             _scheduleTaskEventRepository
                 .SetupGet(p => p.Table)
                     .Returns(events.AsQueryable());
 
-            var result = await Create().GetScheduleTaskEventByIdAsync(id);
+            var result = Create().GetScheduleTaskEventById(id);
 
             Assert.NotNull(result);
             Assert.True(result.IsError);
@@ -217,7 +229,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
         [TestCase(1000, 0, 100)]
         [TestCase(0, 1000, -100)]
         [TestCase(0, 0, null)]
-        public async Task GetScheduleTaskEventByIdAsync_TwoEventsSameTask_TimeAgainstAverageIsCorrect(int eventMilliseconds, int otherEventMilliseconds, double? expectedTimeAgaistAverage)
+        public void GetScheduleTaskEventById_TwoEventsSameTask_TimeAgainstAverageIsCorrect(int eventMilliseconds, int otherEventMilliseconds, double? expectedTimeAgaistAverage)
         {
             const int id = 1001;
             const int scheduleTaskId1 = 2001;
@@ -256,12 +268,16 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             };
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
-                    .ReturnsAsync(scheduleTaskEvent1);
+                .Setup(p => p.GetById(id))
+                    .Returns(scheduleTaskEvent1);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
-                    .ReturnsAsync(scheduleTasks);
+                .Setup(p => p.GetById(scheduleTaskId1))
+                    .Returns(scheduleTasks[0]);
+
+            _scheduleTaskRepository
+                .SetupGet(p => p.Table)
+                    .Returns(scheduleTasks.AsQueryable());
 
             _scheduleTaskEventRepository
                 .SetupGet(p => p.Table)
@@ -271,7 +287,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .SetupGet(p => p.UtcNow)
                 .Returns(DateTime.Parse("04-Mar-2021"));
 
-            var result = await Create().GetScheduleTaskEventByIdAsync(id);
+            var result = Create().GetScheduleTaskEventById(id);
 
             Assert.NotNull(result);
             Assert.AreEqual(expectedTimeAgaistAverage, result.TimeAgainstAverage);

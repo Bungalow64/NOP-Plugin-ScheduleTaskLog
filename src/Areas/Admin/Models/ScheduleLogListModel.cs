@@ -2,7 +2,7 @@
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models
 {
-    public partial record ScheduleLogListModel : BasePagedListModel<ScheduleLogModel>
+    public partial class ScheduleLogListModel : BasePagedListModel<ScheduleLogModel>
     {
     }
 }

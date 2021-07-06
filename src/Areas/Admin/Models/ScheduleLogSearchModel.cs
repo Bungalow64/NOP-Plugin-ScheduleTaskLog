@@ -7,7 +7,7 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models
 {
-    public partial record ScheduleLogSearchModel : BaseSearchModel
+    public partial class ScheduleLogSearchModel : BaseSearchModel
     {
         [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.List.StartedOnFrom")]
         [UIHint("DateNullable")]

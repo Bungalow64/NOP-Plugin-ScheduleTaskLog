@@ -55,9 +55,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         [ValidateIpAddress]
         [AuthorizeAdmin]
         [ValidateVendor]
-        public virtual async Task<IActionResult> RunNow(int id)
+        public virtual IActionResult RunNow(int id)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageScheduleTasks))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageScheduleTasks))
             {
                 return AccessDeniedView();
             }
@@ -66,26 +66,26 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             try
             {
                 //try to get a schedule task with the specified id
-                var scheduleTask = await _scheduleTaskService.GetTaskByIdAsync(id)
+                var scheduleTask = _scheduleTaskService.GetTaskById(id)
                                    ?? throw new ArgumentException("Schedule task cannot be loaded", nameof(id));
 
-                scheduleTaskEvent = await _scheduleTaskEventService.RecordEventStartAsync(scheduleTask, (await _workContext.GetCurrentCustomerAsync()).Id);
+                scheduleTaskEvent = _scheduleTaskEventService.RecordEventStart(scheduleTask, _workContext.CurrentCustomer.Id);
 
                 //ensure that the task is enabled
                 var task = new Task(scheduleTask) { Enabled = true };
-                await task.ExecuteAsync(true, false);
+                task.Execute(true, false);
 
-                await _scheduleTaskEventService.RecordEventEndAsync(scheduleTaskEvent);
+                _scheduleTaskEventService.RecordEventEnd(scheduleTaskEvent);
 
-                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.System.ScheduleTasks.RunNow.Done"));
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.System.ScheduleTasks.RunNow.Done"));
             }
             catch (Exception exc)
             {
-                if (scheduleTaskEvent is not null)
+                if (!(scheduleTaskEvent is null))
                 {
-                    await _scheduleTaskEventService.RecordEventErrorAsync(scheduleTaskEvent, exc);
+                    _scheduleTaskEventService.RecordEventError(scheduleTaskEvent, exc);
                 }
-                await _notificationService.ErrorNotificationAsync(exc);
+                _notificationService.ErrorNotification(exc);
             }
 
             return RedirectToAction("List", "ScheduleTask", new
@@ -94,27 +94,27 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             });
         }
 
-        public virtual async Task<IActionResult> RunTask(string taskType)
+        public virtual IActionResult RunTask(string taskType)
         {
-            var scheduleTask = await _scheduleTaskService.GetTaskByTypeAsync(taskType);
+            var scheduleTask = _scheduleTaskService.GetTaskByType(taskType);
             if (scheduleTask is null)
             {
                 //schedule task cannot be loaded
                 return NoContent();
             }
 
-            var scheduleTaskEvent = await _scheduleTaskEventService.RecordEventStartAsync(scheduleTask);
+            var scheduleTaskEvent = _scheduleTaskEventService.RecordEventStart(scheduleTask);
 
             var task = new Task(scheduleTask);
             try
             {
-                await task.ExecuteAsync(true);
+                task.Execute(true);
 
-                await _scheduleTaskEventService.RecordEventEndAsync(scheduleTaskEvent);
+                _scheduleTaskEventService.RecordEventEnd(scheduleTaskEvent);
             }
             catch (Exception exc)
             {
-                await _scheduleTaskEventService.RecordEventErrorAsync(scheduleTaskEvent, exc);
+                _scheduleTaskEventService.RecordEventError(scheduleTaskEvent, exc);
             }
 
             return NoContent();

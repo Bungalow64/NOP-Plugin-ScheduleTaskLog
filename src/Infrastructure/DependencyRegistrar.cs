@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Autofac;
 using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
 using Nop.Core.Infrastructure.DependencyManagement;
@@ -15,10 +15,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
         /// <param name="services">Collection of service descriptors</param>
         /// <param name="typeFinder">Type finder</param>
         /// <param name="appSettings">App settings</param>
-        public void Register(IServiceCollection services, ITypeFinder typeFinder, AppSettings appSettings)
+        public void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
         {
-            services.AddSingleton<ICurrentDateTimeHelper, CurrentDateTimeHelper>();
-            services.AddScoped<IScheduleTaskEventService, ScheduleTaskEventService>();
+            builder.RegisterType<CurrentDateTimeHelper>().As<ICurrentDateTimeHelper>().SingleInstance();
+            builder.RegisterType<ScheduleTaskEventService>().As<IScheduleTaskEventService>().InstancePerLifetimeScope();
         }
 
         public int Order => 1;

@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LinqToDB;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Domain.Tasks;
 using Nop.Data;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
@@ -55,7 +58,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             _settings = settings;
         }
 
-        public virtual async Task<ScheduleTaskEvent> RecordEventStartAsync(ScheduleTask scheduleTask, int? customerId = null)
+        public virtual ScheduleTaskEvent RecordEventStart(ScheduleTask scheduleTask, int? customerId = null)
         {
             try
             {
@@ -68,12 +71,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
             catch (Exception ex)
             {
-                await _logger.ErrorAsync($"Cannot log the start of the schedule task event", ex);
+                _logger.Error($"Cannot log the start of the schedule task event", ex);
                 return null;
             }
         }
 
-        public virtual async Task<ScheduleTaskEvent> RecordEventEndAsync(ScheduleTaskEvent scheduleTaskEvent)
+        public virtual ScheduleTaskEvent RecordEventEnd(ScheduleTaskEvent scheduleTaskEvent)
         {
             if (scheduleTaskEvent is null)
             {
@@ -83,17 +86,17 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             try
             {
                 scheduleTaskEvent.End(_currentDateTimeHelper);
-                await _scheduleTaskEventRepository.InsertAsync(scheduleTaskEvent);
+                _scheduleTaskEventRepository.Insert(scheduleTaskEvent);
                 return scheduleTaskEvent;
             }
             catch (Exception ex)
             {
-                await _logger.ErrorAsync($"Cannot log the end of the schedule task event", ex);
+                _logger.Error($"Cannot log the end of the schedule task event", ex);
                 return null;
             }
         }
 
-        public virtual async Task<ScheduleTaskEvent> RecordEventErrorAsync(ScheduleTaskEvent scheduleTaskEvent, Exception exc)
+        public virtual ScheduleTaskEvent RecordEventError(ScheduleTaskEvent scheduleTaskEvent, Exception exc)
         {
             if (scheduleTaskEvent is null)
             {
@@ -103,17 +106,17 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             try
             {
                 scheduleTaskEvent.Error(_currentDateTimeHelper, exc);
-                await _scheduleTaskEventRepository.InsertAsync(scheduleTaskEvent);
+                _scheduleTaskEventRepository.Insert(scheduleTaskEvent);
                 return scheduleTaskEvent;
             }
             catch (Exception ex)
             {
-                await _logger.ErrorAsync($"Cannot log the error of the schedule task event", ex);
+                _logger.Error($"Cannot log the error of the schedule task event", ex);
                 return null;
             }
         }
 
-        public virtual async Task<ScheduleLogListModel> PrepareLogListModelAsync(ScheduleLogSearchModel searchModel)
+        public virtual ScheduleLogListModel PrepareLogListModel(ScheduleLogSearchModel searchModel)
         {
             if (searchModel is null)
             {
@@ -121,12 +124,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
 
             var startedFromValue = searchModel.StartedOnFrom.HasValue
-                ? (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.StartedOnFrom.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync()) : null;
+                ? (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.StartedOnFrom.Value, _dateTimeHelper.CurrentTimeZone) : null;
             var startedToValue = searchModel.StartedOnTo.HasValue
-                ? (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.StartedOnTo.Value, await _dateTimeHelper.GetCurrentTimeZoneAsync()).AddDays(1) : null;
+                ? (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.StartedOnTo.Value, _dateTimeHelper.CurrentTimeZone).AddDays(1) : null;
 
-            var logItems = await _scheduleTaskEventRepository
-                .GetAllPagedAsync(query =>
+            var logItems = GetAllPaged(query =>
                 {
                     if (searchModel.ScheduleTaskId > 0)
                     {
@@ -152,104 +154,104 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
                     return query;
                 }, searchModel.Page - 1, searchModel.PageSize);
 
-            var tasks = await GetAllTasksAsync();
-            var averages = await GetAverageTimesAsync();
+            var tasks = GetAllTasks();
+            var averages = GetAverageTimes();
 
-            var model = await new ScheduleLogListModel().PrepareToGridAsync(searchModel, logItems, () =>
+            var model = new ScheduleLogListModel().PrepareToGrid(searchModel, logItems, () =>
             {
-                return logItems.SelectAwait(async logItem => await ToModelAsync(logItem, tasks, averages));
+                return logItems.Select(logItem => ToModel(logItem, tasks, averages));
             });
 
             return model;
         }
 
-        public async Task<ScheduleLogModel> GetScheduleTaskEventByIdAsync(int id)
+        public ScheduleLogModel GetScheduleTaskEventById(int id)
         {
-            var logItem = await _scheduleTaskEventRepository.GetByIdAsync(id);
+            var logItem = _scheduleTaskEventRepository.GetById(id);
             if (logItem is null)
             {
                 return null;
             }
 
-            var tasks = await GetAllTasksAsync(logItem.ScheduleTaskId);
-            var averages = await GetAverageTimesAsync(logItem.ScheduleTaskId);
+            var tasks = GetAllTasks(logItem.ScheduleTaskId);
+            var averages = GetAverageTimes(logItem.ScheduleTaskId);
 
-            return await ToModelAsync(logItem, tasks, averages);
+            return ToModel(logItem, tasks, averages);
         }
 
-        public Task ClearLogAsync()
+        public void ClearLog()
         {
-            return _scheduleTaskEventRepository.TruncateAsync();
+            _scheduleTaskEventRepository.Truncate();
         }
 
-        public async Task<IList<SelectListItem>> GetAvailableTasksAsync()
+        public IList<SelectListItem> GetAvailableTasks()
         {
-            var tasks = await GetAllTasksAsync();
+            var tasks = GetAllTasks();
 
-            return await tasks
+            return tasks
                 .OrderBy(p => p.Name)
                 .ThenBy(p => p.Id)
                 .Select(p => new SelectListItem(p.Name, p.Id.ToString()))
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IList<SelectListItem>> GetAvailableStatesAsync()
+        public IList<SelectListItem> GetAvailableStates()
         {
             var states = new List<SelectListItem>
             {
-                new SelectListItem(await _localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.Success"), SUCCESS_STATE_ID.ToString()),
-                new SelectListItem(await _localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.Error"), ERROR_STATE_ID.ToString())
+                new SelectListItem(_localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.Success"), SUCCESS_STATE_ID.ToString()),
+                new SelectListItem(_localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.Error"), ERROR_STATE_ID.ToString())
             };
 
             return states;
         }
 
-        public async Task<IList<SelectListItem>> GetAvailableTriggerTypesAsync()
+        public IList<SelectListItem> GetAvailableTriggerTypes()
         {
             var triggerTypes = new List<SelectListItem>
             {
-                new SelectListItem(await _localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.ByScheduler"), TRIGGER_SCHEDULE_ID.ToString()),
-                new SelectListItem(await _localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.ByUser"), TRIGGER_USER_ID.ToString())
+                new SelectListItem(_localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.ByScheduler"), TRIGGER_SCHEDULE_ID.ToString()),
+                new SelectListItem(_localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.ByUser"), TRIGGER_USER_ID.ToString())
             };
 
             return triggerTypes;
         }
 
-        public Task PruneEventsAsync()
+        public void PruneEvents()
         {
-            return _scheduleTaskEventRepository.DeleteAsync(p => p.EventStartDateUtc < _currentDateTimeHelper.UtcNow.AddDays(_settings.LogExpiryDays * -1));
+            _scheduleTaskEventRepository.Delete(p => p.EventStartDateUtc < _currentDateTimeHelper.UtcNow.AddDays(_settings.LogExpiryDays * -1));
         }
 
-        private async Task<ScheduleLogModel> ToModelAsync(ScheduleTaskEvent logItem, IList<ScheduleTask> tasks, IDictionary<int, double> averages)
+        private ScheduleLogModel ToModel(ScheduleTaskEvent logItem, IList<ScheduleTask> tasks, IDictionary<int, double> averages)
         {
             var logModel = logItem.ToModel<ScheduleLogModel>();
-            logModel.EventStartDateUtc = await _dateTimeHelper.ConvertToUserTimeAsync(logItem.EventStartDateUtc, DateTimeKind.Utc);
-            logModel.EventEndDateUtc = await _dateTimeHelper.ConvertToUserTimeAsync(logItem.EventEndDateUtc, DateTimeKind.Utc);
+            logModel.EventStartDateUtc = _dateTimeHelper.ConvertToUserTime(logItem.EventStartDateUtc, DateTimeKind.Utc);
+            logModel.EventEndDateUtc = _dateTimeHelper.ConvertToUserTime(logItem.EventEndDateUtc, DateTimeKind.Utc);
             logModel.TaskName = tasks.FirstOrDefault(p => p.Id == logItem.ScheduleTaskId)?.Name;
             logModel.TimeAgainstAverage = GetTimeAgainstAverage(logItem.ScheduleTaskId, logItem.TotalMilliseconds, averages);
             if (logItem.TriggeredByCustomerId.HasValue)
             {
-                var customer = await _customerService.GetCustomerByIdAsync(logItem.TriggeredByCustomerId.Value);
+                var customer = _customerService.GetCustomerById(logItem.TriggeredByCustomerId.Value);
                 logModel.TriggeredByCustomerEmail = customer?.Email;
             }
             return logModel;
         }
 
-        private async Task<IList<ScheduleTask>> GetAllTasksAsync(int? taskId = null)
+        private IList<ScheduleTask> GetAllTasks(int? taskId = null)
         {
             if (taskId.HasValue)
             {
-                var task = await _scheduleTaskRepository.GetByIdAsync(taskId);
-                if (task is not null)
+                var task = _scheduleTaskRepository.GetById(taskId);
+                if (!(task is null))
                 {
                     return new List<ScheduleTask> { task };
                 }
                 return new List<ScheduleTask> { };
             }
-            return await _scheduleTaskRepository.GetAllAsync(query => query, cache => default);
+            return GetAll(_scheduleTaskRepository.Table, query => query);
         }
 
-        private async Task<Dictionary<int, double>> GetAverageTimesAsync(int? taskId = null)
+        private Dictionary<int, double> GetAverageTimes(int? taskId = null)
         {
             var query = _scheduleTaskEventRepository
                 .Table
@@ -260,9 +262,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
                 query = query.Where(p => p.ScheduleTaskId == taskId.Value);
             }
 
-            return await query
+            return query
                 .GroupBy(p => p.ScheduleTaskId, p => p.TotalMilliseconds)
-                .ToDictionaryAsync(p => p.Key, p => p.Average());
+                .ToDictionary(p => p.Key, p => p.Average());
         }
 
         private static double? GetTimeAgainstAverage(int scheduleTaskId, double totalMilliseconds, IDictionary<int, double> averages)
@@ -280,6 +282,50 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
 
             return (totalMilliseconds - average) / average * 100;
+        }
+
+        private IPagedList<ScheduleTaskEvent> GetAllPaged(Func<IQueryable<ScheduleTaskEvent>, IQueryable<ScheduleTaskEvent>> func = null,
+            int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false)
+        {
+            var query = _scheduleTaskEventRepository.Table;
+
+            query = func != null ? func(query) : query;
+
+            return ToPagedList(query, pageIndex, pageSize, getOnlyTotalCount);
+        }
+
+        private static IPagedList<T> ToPagedList<T>(IQueryable<T> source, int pageIndex, int pageSize, bool getOnlyTotalCount = false)
+        {
+            if (source == null)
+            {
+                return new PagedList<T>(new List<T>(), pageIndex, pageSize);
+            }
+
+            //min allowed page size is 1
+            pageSize = Math.Max(pageSize, 1);
+
+            var count = source.Count();
+
+            var data = new List<T>();
+
+            if (!getOnlyTotalCount)
+            {
+                data.AddRange(source.Skip(pageIndex * pageSize).Take(pageSize).ToList());
+            }
+
+            return new PagedList<T>(data, pageIndex, pageSize, count);
+        }
+        private IList<TEntity> GetAll<TEntity>(IQueryable<TEntity> table, Func<IQueryable<TEntity>, IQueryable<TEntity>> func = null)
+        {
+            IList<TEntity> getAll()
+            {
+                var query = table;
+                query = func != null ? func(query) : query;
+
+                return query.ToList();
+            }
+
+            return getAll();
         }
     }
 }

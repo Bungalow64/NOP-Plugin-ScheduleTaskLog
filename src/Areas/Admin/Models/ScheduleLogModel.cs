@@ -4,7 +4,7 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models
 {
-    public partial record ScheduleLogModel : BaseNopEntityModel
+    public partial class ScheduleLogModel : BaseNopEntityModel
     {
         [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.TaskName")]
         public string TaskName { get; set; }

@@ -16,7 +16,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Validators
         {
             RuleFor(model => model.LogExpiryDays)
                 .GreaterThan(0)
-                .WithMessageAwait(localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.Configuration.LogExpiryDays.MustBePositive"));
+                .WithMessage(localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.Configuration.LogExpiryDays.MustBePositive"));
         }
 
         #endregion

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
 using Nop.Plugin.Admin.ScheduleTaskLog.Services;
@@ -57,21 +56,21 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-        public virtual async Task<IActionResult> List()
+        public virtual IActionResult List()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
             {
                 return AccessDeniedView();
             }
 
             var model = new ScheduleLogSearchModel();
-            var tasks = await _scheduleTaskEventService.GetAvailableTasksAsync();
-            var states = await _scheduleTaskEventService.GetAvailableStatesAsync();
-            var triggerTypes = await _scheduleTaskEventService.GetAvailableTriggerTypesAsync();
+            var tasks = _scheduleTaskEventService.GetAvailableTasks();
+            var states = _scheduleTaskEventService.GetAvailableStates();
+            var triggerTypes = _scheduleTaskEventService.GetAvailableTriggerTypes();
 
-            tasks.Insert(0, new SelectListItem { Text = await _localizationService.GetResourceAsync("Admin.Common.All"), Value = "0" });
-            states.Insert(0, new SelectListItem { Text = await _localizationService.GetResourceAsync("Admin.Common.All"), Value = "0" });
-            triggerTypes.Insert(0, new SelectListItem { Text = await _localizationService.GetResourceAsync("Admin.Common.All"), Value = "0" });
+            tasks.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            states.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            triggerTypes.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
 
             model.AvailableScheduleTasks = tasks;
             model.AvailableStates = states;
@@ -82,27 +81,27 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> LogList(ScheduleLogSearchModel searchModel)
+        public virtual IActionResult LogList(ScheduleLogSearchModel searchModel)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
             {
                 return AccessDeniedView();
             }
 
             //prepare model
-            var model = await _scheduleTaskEventService.PrepareLogListModelAsync(searchModel);
+            var model = _scheduleTaskEventService.PrepareLogListModel(searchModel);
 
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> View(int id)
+        public virtual IActionResult View(int id)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
             {
                 return AccessDeniedView();
             }
 
-            var model = await _scheduleTaskEventService.GetScheduleTaskEventByIdAsync(id);
+            var model = _scheduleTaskEventService.GetScheduleTaskEventById(id);
             if (model is null)
             {
                 return RedirectToAction("List");
@@ -113,26 +112,26 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("clearall")]
-        public virtual async Task<IActionResult> ClearAll()
+        public virtual IActionResult ClearAll()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
             {
                 return AccessDeniedView();
             }
 
-            await _scheduleTaskEventService.ClearLogAsync();
+            _scheduleTaskEventService.ClearLog();
 
             //activity log
-            await _customerActivityService.InsertActivityAsync("DeleteScheduleTaskLog", await _localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.ActivityLog.DeleteScheduleTaskLog"));
+            _customerActivityService.InsertActivity("DeleteScheduleTaskLog", _localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.ActivityLog.DeleteScheduleTaskLog"));
 
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.System.Log.Cleared"));
+            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.System.Log.Cleared"));
 
             return RedirectToAction("List");
         }
 
-        public async Task<IActionResult> Configure()
+        public IActionResult Configure()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
             {
                 return AccessDeniedView();
             }
@@ -148,27 +147,27 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> Configure(ConfigurationModel model)
+        public IActionResult Configure(ConfigurationModel model)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
             {
                 return AccessDeniedView();
             }
 
             if (!ModelState.IsValid)
             {
-                _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Plugins.Admin.ScheduleTaskLog.Configuration.CouldNotBeSaved"));
-                return await Configure();
+                _notificationService.ErrorNotification( _localizationService.GetResource("Plugins.Admin.ScheduleTaskLog.Configuration.CouldNotBeSaved"));
+                return Configure();
             }
 
             //save settings
             _settings.DisableLog = model.DisableLog;
             _settings.LogExpiryDays = model.LogExpiryDays;
-            await _settingService.SaveSettingAsync(_settings);
+            _settingService.SaveSetting(_settings);
 
-            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification( _localizationService.GetResource("Admin.Plugins.Saved"));
 
-            return await Configure();
+            return Configure();
         }
 
         #endregion

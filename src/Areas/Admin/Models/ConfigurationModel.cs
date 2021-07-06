@@ -3,7 +3,7 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models
 {
-    public record ConfigurationModel : BaseNopModel
+    public class ConfigurationModel : BaseNopModel
     {
         [NopResourceDisplayName("Plugins.Admin.ScheduleTaskLog.Configuration.DisableLogs")]
         public bool DisableLog { get; set; }
