@@ -26,8 +26,6 @@ steps:
 
 - script: dir $(Build.SourcesDirectory)
 
-- powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
-
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
@@ -43,3 +41,17 @@ steps:
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.40'
   
 - powershell: Get-ChildItem -Path '$(Build.SourcesDirectory)' -recurse
+
+- task: CopyFiles@2
+  inputs:
+    contents: '$(Build.SourcesDirectory)/NOP-4.30/Presentation/Nop.Web/Plugins/Admin.ScheduleTaskLog'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/4.30/'
+  displayName: 'Copy plugin - 4.30'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '$(Build.SourcesDirectory)/NOP-4.40/src/Presentation/Nop.Web/Plugins/Admin.ScheduleTaskLog'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/4.40/'
+  displayName: 'Copy plugin - 4.40'
+  
+- powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
