@@ -24,8 +24,6 @@ steps:
 - checkout: NOP_4_30
   submodules: true
 
-- script: dir $(Build.SourcesDirectory)
-
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
@@ -41,9 +39,32 @@ steps:
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.40'
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog' -ItemType Directory }
+  displayName: 'Check and create directory - 4.30'
+
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.40/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.40/Admin.ScheduleTaskLog' -ItemType Directory }
+  displayName: 'Check and create directory - 4.40'
+
+- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-Plugin-ScheduleTaskLog\package\uploadedItems.json' -Destination '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy manifest file'
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.30\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.30\Admin.ScheduleTaskLog' -Recurse
+  displayName: 'Copy plugin - 4.30'
+
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.40\src\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.40\Admin.ScheduleTaskLog' -Recurse
+  displayName: 'Copy plugin - 4.40'
 
 - powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
+  displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
+
+- task: ArchiveFiles@2
+  displayName: 'Generate zip file'
+  inputs:
+    rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)\Admin.ScheduleTaskLog_$(Build.BuildId).zip'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish zip file'
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)\Admin.ScheduleTaskLog_$(Build.BuildId).zip'
+    ArtifactName: GeneratedPackage
