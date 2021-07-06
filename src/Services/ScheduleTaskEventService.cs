@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
-using Nop.Core.Caching;
 using Nop.Core.Domain.Tasks;
 using Nop.Data;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;

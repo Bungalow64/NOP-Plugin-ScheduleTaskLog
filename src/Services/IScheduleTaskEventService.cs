@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core.Domain.Tasks;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;

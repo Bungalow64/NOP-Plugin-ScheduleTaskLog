@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Cms;
 using Nop.Core.Domain.Tasks;
@@ -11,7 +10,6 @@ using Nop.Services.Localization;
 using Nop.Services.Plugins;
 using Nop.Services.Tasks;
 using Nop.Web.Framework.Infrastructure;
-using Task = System.Threading.Tasks.Task;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog
 {
