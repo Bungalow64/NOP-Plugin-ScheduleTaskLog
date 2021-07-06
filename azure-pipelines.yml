@@ -23,5 +23,5 @@ steps:
 
 - script: dir $(Build.SourcesDirectory)
 
-- script: 'echo "Structure of work folder of this pipeline:" tree $(Agent.WorkFolder)\1 /f'
-- script: 'echo "Structure of SourcesDirectory of this pipeline:" tree $(Build.SourcesDirectory)\1 /f'
+- script: echo "Structure of work folder of this pipeline:" tree $(Agent.WorkFolder)\1 /f
+- script: echo "Structure of SourcesDirectory of this pipeline:" tree $(Build.SourcesDirectory)\1 /f
