@@ -35,6 +35,7 @@ steps:
 - script: |
     git config --global user.email "jamie@bungalow64.co.uk"
     git config --global user.name "Jamie Burns"
+    git config --global --add url."git@github.com:".insteadOf "https://github.com/"
   displayName: 'Set git details'
 
 - script: |
