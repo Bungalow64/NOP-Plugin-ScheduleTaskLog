@@ -26,7 +26,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Domain
         public DateTime EventEndDateUtc { get; set; }
 
         /// <summary>
-        /// Given a task that has an end date, this is the total number of milliseconds that have elapsed
+        /// The total number of milliseconds that have elapsed
         /// </summary>
         public long TotalMilliseconds { get; set; }
 
@@ -59,7 +59,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Domain
         /// Starts the event
         /// </summary>
         /// <param name="currentDateTimeHelper">Helper to get the current date/time</param>
-        /// <param name="taskName">The name of the task</param>
+        /// <param name="scheduleTask">The task being executed</param>
         /// <returns>Returns the started event</returns>
         public static ScheduleTaskEvent Start(ICurrentDateTimeHelper currentDateTimeHelper, ScheduleTask scheduleTask)
         {
@@ -80,6 +80,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Domain
             };
         }
 
+        /// <summary>
+        /// Marks the event as being triggered manually
+        /// </summary>
+        /// <param name="customerId">The id of the customer who triggered the task</param>
+        /// <returns>Returns the updated event</returns>
         public ScheduleTaskEvent SetTriggeredManually(int customerId)
         {
             IsStartedManually = true;

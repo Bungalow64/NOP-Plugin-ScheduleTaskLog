@@ -8,6 +8,9 @@ using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Mapping.Builders
 {
+    /// <summary>
+    /// Builds the <see cref="ScheduleTaskEvent"/> entity
+    /// </summary>
     public class ScheduleTaskEventBuilder : NopEntityBuilder<ScheduleTaskEvent>
     {
         #region Methods

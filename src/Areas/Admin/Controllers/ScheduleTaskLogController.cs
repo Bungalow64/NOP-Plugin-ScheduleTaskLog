@@ -14,6 +14,9 @@ using Nop.Web.Framework.Controllers;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 {
+    /// <summary>
+    /// Controller for handling actions to configure and view the schedule task log
+    /// </summary>
     public class ScheduleTaskLogController : BaseAdminController
     {
         #region Fields
@@ -30,6 +33,16 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
         #region Ctor
 
+        /// <summary>
+        /// Creates an instance of the <see cref="ScheduleTaskController"/>
+        /// </summary>
+        /// <param name="permissionService"></param>
+        /// <param name="scheduleTaskEventService"></param>
+        /// <param name="notificationService"></param>
+        /// <param name="localizationService"></param>
+        /// <param name="customerActivityService"></param>
+        /// <param name="settingService"></param>
+        /// <param name="settings"></param>
         public ScheduleTaskLogController(
             IPermissionService permissionService,
             IScheduleTaskEventService scheduleTaskEventService,
@@ -52,11 +65,19 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
         #region Methods
 
+        /// <summary>
+        /// Redirects to the list page
+        /// </summary>
+        /// <returns>Returns the redirection</returns>
         public virtual IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
+        /// <summary>
+        /// The base page for the list of schedule task logs
+        /// </summary>
+        /// <returns>The page</returns>
         public virtual async Task<IActionResult> List()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
@@ -81,6 +102,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             return View("~/Plugins/Admin.ScheduleTaskLog/Areas/Admin/Views/ScheduleTaskLog/List.cshtml", model);
         }
 
+        /// <summary>
+        /// Requests a page of logs
+        /// </summary>
+        /// <param name="searchModel">The search details</param>
+        /// <returns>The list of log entries</returns>
         [HttpPost]
         public virtual async Task<IActionResult> LogList(ScheduleLogSearchModel searchModel)
         {
@@ -89,12 +115,17 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
                 return AccessDeniedView();
             }
 
-            //prepare model
             var model = await _scheduleTaskEventService.PrepareLogListModelAsync(searchModel);
 
             return Json(model);
         }
 
+        /// <summary>
+        /// The page to view the specific details of an event
+        /// </summary>
+        /// <param name="id">The id of the log entry</param>
+        /// <remarks>If the <paramref name="id"/> is not found then this action will redirect to the list page</remarks>
+        /// <returns>The page containing the details of the requested event, or a redirection to the list page if the <paramref name="id"/> is not found</returns>
         public virtual async Task<IActionResult> View(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
@@ -111,6 +142,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             return View("~/Plugins/Admin.ScheduleTaskLog/Areas/Admin/Views/ScheduleTaskLog/View.cshtml", model);
         }
 
+        /// <summary>
+        /// Clears all entries in the schedule task log
+        /// </summary>
+        /// <returns>Returns the base list page</returns>
         [HttpPost, ActionName("List")]
         [FormValueRequired("clearall")]
         public virtual async Task<IActionResult> ClearAll()
@@ -130,6 +165,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
+        /// <summary>
+        /// Gets the page showing the configuration options for the plugin
+        /// </summary>
+        /// <returns>Returns the configuration page</returns>
         public async Task<IActionResult> Configure()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins))
@@ -146,6 +185,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             return View("~/Plugins/Admin.ScheduleTaskLog/Areas/Admin/Views/Configure.cshtml", model);
         }
 
+        /// <summary>
+        /// Updates the configuration settings for the plugin
+        /// </summary>
+        /// <param name="model">The updated settings</param>
+        /// <returns>Returns the configuration page</returns>
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Configure(ConfigurationModel model)
@@ -161,7 +205,6 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
                 return await Configure();
             }
 
-            //save settings
             _settings.DisableLog = model.DisableLog;
             _settings.LogExpiryDays = model.LogExpiryDays;
             await _settingService.SaveSettingAsync(_settings);

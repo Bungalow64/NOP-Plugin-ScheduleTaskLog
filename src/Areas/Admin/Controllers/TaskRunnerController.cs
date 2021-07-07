@@ -15,6 +15,9 @@ using Task = Nop.Services.Tasks.Task;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 {
+    /// <summary>
+    /// The controller that executes tasks, including logging the events in the schedule task log
+    /// </summary>
     public class TaskRunnerController : BasePluginController
     {
         #region Fields
@@ -30,6 +33,15 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
         #region Ctor
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TaskRunnerController"/>
+        /// </summary>
+        /// <param name="localizationService"></param>
+        /// <param name="notificationService"></param>
+        /// <param name="permissionService"></param>
+        /// <param name="scheduleTaskService"></param>
+        /// <param name="scheduleTaskEventService"></param>
+        /// <param name="workContext"></param>
         public TaskRunnerController(
             ILocalizationService localizationService,
             INotificationService notificationService,
@@ -50,6 +62,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
         #region Methods
 
+        /// <summary>
+        /// Executes a specific task immediately
+        /// </summary>
+        /// <param name="id">The id of the task</param>
+        /// <returns>The list page of schedule tasks</returns>
         [Area(AreaNames.Admin)]
         [AutoValidateAntiforgeryToken]
         [ValidateIpAddress]
@@ -65,13 +82,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             ScheduleTaskEvent scheduleTaskEvent = null;
             try
             {
-                //try to get a schedule task with the specified id
                 var scheduleTask = await _scheduleTaskService.GetTaskByIdAsync(id)
                                    ?? throw new ArgumentException("Schedule task cannot be loaded", nameof(id));
 
                 scheduleTaskEvent = await _scheduleTaskEventService.RecordEventStartAsync(scheduleTask, (await _workContext.GetCurrentCustomerAsync()).Id);
 
-                //ensure that the task is enabled
                 var task = new Task(scheduleTask) { Enabled = true };
                 await task.ExecuteAsync(true, false);
 
@@ -94,12 +109,16 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             });
         }
 
+        /// <summary>
+        /// Executes a task as part of a schedule
+        /// </summary>
+        /// <param name="taskType">The type of the task to execute</param>
+        /// <returns>Nothing</returns>
         public virtual async Task<IActionResult> RunTask(string taskType)
         {
             var scheduleTask = await _scheduleTaskService.GetTaskByTypeAsync(taskType);
             if (scheduleTask is null)
             {
-                //schedule task cannot be loaded
                 return NoContent();
             }
 

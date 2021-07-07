@@ -4,12 +4,19 @@ using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Migrations
 {
+    /// <summary>
+    /// Creates the migration of the plugin entities
+    /// </summary>
     [SkipMigrationOnUpdate]
     [NopMigration("2021/06/25 09:00:00:0000000", "Nop.Plugin.Admin.ScheduleTaskLog schema")]
     public class SchemaMigration : AutoReversingMigration
     {
         private readonly IMigrationManager _migrationManager;
 
+        /// <summary>
+        /// Creates an instance of <see cref="SchemaMigration"/>
+        /// </summary>
+        /// <param name="migrationManager"></param>
         public SchemaMigration(IMigrationManager migrationManager)
         {
             _migrationManager = migrationManager;
