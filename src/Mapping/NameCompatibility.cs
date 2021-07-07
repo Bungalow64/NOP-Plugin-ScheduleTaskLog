@@ -4,7 +4,9 @@ using Nop.Data.Mapping;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Mapping
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Backward compatibility of table naming
+    /// </summary>
     public partial class NameCompatibility : INameCompatibility
     {
         /// <inheritdoc/>
