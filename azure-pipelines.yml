@@ -47,14 +47,12 @@ steps:
   inputs:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.30/**/CustomPlugins/**/*.Tests.csproj'
-   arguments: '--no-build'
   displayName: dotnet test - NOP 4.30
 
 - task: DotNetCoreCLI@2
   inputs:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.40/**/CustomPlugins/**/*.Tests.csproj'
-   arguments: '--no-build'
   displayName: dotnet test - NOP 4.40
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog' -ItemType Directory }
