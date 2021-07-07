@@ -135,6 +135,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                     .ReturnsAsync(scheduleTaskEvent);
 
             _scheduleTaskRepository
+                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true))
+                    .ReturnsAsync(scheduleTasks[0]);
+
+            _scheduleTaskRepository
+                .Setup(p => p.GetByIdAsync(scheduleTaskId2, null, true))
+                    .ReturnsAsync(scheduleTasks[1]);
+
+            _scheduleTaskRepository
                 .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
                     .ReturnsAsync(scheduleTasks);
 
@@ -193,6 +201,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             _scheduleTaskEventRepository
                 .Setup(p => p.GetByIdAsync(id, null, true))
                     .ReturnsAsync(scheduleTaskEvent);
+
+            _scheduleTaskRepository
+                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true))
+                    .ReturnsAsync(scheduleTasks[0]);
 
             _scheduleTaskRepository
                 .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
@@ -258,6 +270,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             _scheduleTaskEventRepository
                 .Setup(p => p.GetByIdAsync(id, null, true))
                     .ReturnsAsync(scheduleTaskEvent1);
+
+            _scheduleTaskRepository
+                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true))
+                    .ReturnsAsync(scheduleTasks[0]);
 
             _scheduleTaskRepository
                 .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
