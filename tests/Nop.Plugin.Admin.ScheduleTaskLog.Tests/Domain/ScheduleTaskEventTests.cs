@@ -20,6 +20,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
             _currentDateTimeHelper.SetupGet(p => p.UtcNow).Returns(DateTime.UtcNow);
         }
 
+        #region Start
+
         [Test]
         public void Start_NullCurrentDateTimeHelper_ThrowException()
         {
@@ -58,6 +60,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             Assert.AreEqual(1002, data.ScheduleTaskId);
         }
+
+        #endregion
+
+        #region End
 
         [Test]
         public void End_NullCurrentDateTimeHelper_ThrowException()
@@ -101,6 +107,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
             Assert.AreEqual(expectedStartDate, data.EventStartDateUtc);
             Assert.AreEqual(expectedEndDate, data.EventEndDateUtc);
         }
+
+        #endregion
+
+        #region Error
 
         [Test]
         public void Error_NullCurrentDateTimeHelper_ThrowException()
@@ -209,7 +219,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
             Exception caughtException;
             try
             {
-                throw new InvalidOperationException("");
+                throw new InvalidOperationException(string.Empty);
             }
             catch (Exception ex)
             {
@@ -220,7 +230,27 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, caughtException);
 
-            Assert.AreEqual("", data.ExceptionMessage);
+            Assert.AreEqual(string.Empty, data.ExceptionMessage);
         }
+
+        #endregion
+
+        #region SetTriggeredManually
+
+        [Test]
+        public void SetTriggeredManually_PropertySet()
+        {
+            const int customerId = 100;
+
+            var data = ScheduleTaskEvent.Start(_currentDateTimeHelper.Object, new ScheduleTask());
+
+            data.SetTriggeredManually(customerId);
+
+            Assert.True(data.IsStartedManually);
+            Assert.AreEqual(customerId, data.TriggeredByCustomerId);
+        }
+
+
+        #endregion
     }
 }
