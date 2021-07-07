@@ -24,9 +24,12 @@ pool:
 
 steps:
 - checkout: Plugin
+  persistCredentials: true
 - checkout: NOP_4_40
+  persistCredentials: true
   submodules: true
 - checkout: NOP_4_30
+  persistCredentials: true
   submodules: true
 
 - script: |
