@@ -30,14 +30,16 @@ steps:
   submodules: true
 
 - script: |
-    cd $(Build.SourcesDirectory)/NOP-4.30/CustomPlugins
+    cd $(Build.SourcesDirectory)/NOP-4.30/CustomPlugins/Nop.Plugin.Admin.ScheduleTaskLog
     dir
+    git status
     git pull
   displayName: 'Get latest submodule - 4.30'
 
 - script: |
-    cd $(Build.SourcesDirectory)/NOP-4.40/src/CustomPlugins
+    cd $(Build.SourcesDirectory)/NOP-4.40/src/CustomPlugins/Nop.Plugin.Admin.ScheduleTaskLog
     dir
+    git status
     git pull
   displayName: 'Get latest submodule - 4.40'
 
