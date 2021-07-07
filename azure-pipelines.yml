@@ -24,13 +24,15 @@ pool:
 
 steps:
 - checkout: Plugin
-  persistCredentials: true
 - checkout: NOP_4_40
-  persistCredentials: true
   submodules: true
 - checkout: NOP_4_30
-  persistCredentials: true
   submodules: true
+
+- script: |
+    git config --global user.email "jamie@bungalow64.co.uk"
+    git config --global user.name "Jamie Burns"
+  displayName: 'Set git details'
 
 - script: |
     cd $(Build.SourcesDirectory)/NOP-4.30/CustomPlugins/Nop.Plugin.Admin.ScheduleTaskLog
