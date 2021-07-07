@@ -29,6 +29,7 @@ steps:
 #  submodules: true
 - checkout: NOP_4_30
   submodules: true
+  persistCredentials: true
 
 #- script: |
 #    git config --global user.email "jamieburnsdeveloper@gmail.com"
