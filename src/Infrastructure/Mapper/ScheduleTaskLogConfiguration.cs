@@ -12,6 +12,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure.Mapper
     {
         #region Ctor
 
+        /// <summary>
+        /// Creates an instance of <see cref="ScheduleTaskLogConfiguration"/>
+        /// </summary>
         public ScheduleTaskLogConfiguration()
         {
             CreateMap<ScheduleTaskEvent, ScheduleLogModel>();

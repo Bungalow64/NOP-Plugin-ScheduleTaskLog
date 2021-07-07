@@ -19,6 +19,9 @@ using Nop.Web.Framework.Models.Extensions;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
 {
+    /// <summary>
+    /// Handles all interactions with the schedule task event log
+    /// </summary>
     public class ScheduleTaskEventService : IScheduleTaskEventService
     {
         private readonly ICurrentDateTimeHelper _currentDateTimeHelper;
@@ -36,6 +39,17 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
         private const int TRIGGER_SCHEDULE_ID = 1;
         private const int TRIGGER_USER_ID = 2;
 
+        /// <summary>
+        /// Creates an instance of <see cref="ScheduleTaskEventService"/>
+        /// </summary>
+        /// <param name="currentDateTimeHelper"></param>
+        /// <param name="dateTimeHelper"></param>
+        /// <param name="scheduleTaskRepository"></param>
+        /// <param name="scheduleTaskEventRepository"></param>
+        /// <param name="localizationService"></param>
+        /// <param name="logger"></param>
+        /// <param name="customerService"></param>
+        /// <param name="settings"></param>
         public ScheduleTaskEventService(
             ICurrentDateTimeHelper currentDateTimeHelper,
             IDateTimeHelper dateTimeHelper,
@@ -56,6 +70,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             _settings = settings;
         }
 
+        /// <inheritdoc/>
         public virtual ScheduleTaskEvent RecordEventStart(ScheduleTask scheduleTask, int? customerId = null)
         {
             try
@@ -74,6 +89,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
         }
 
+        /// <inheritdoc/>
         public virtual ScheduleTaskEvent RecordEventEnd(ScheduleTaskEvent scheduleTaskEvent)
         {
             if (scheduleTaskEvent is null)
@@ -94,6 +110,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
         }
 
+        /// <inheritdoc/>
         public virtual ScheduleTaskEvent RecordEventError(ScheduleTaskEvent scheduleTaskEvent, Exception exc)
         {
             if (scheduleTaskEvent is null)
@@ -114,6 +131,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
         }
 
+        /// <inheritdoc/>
         public virtual ScheduleLogListModel PrepareLogListModel(ScheduleLogSearchModel searchModel)
         {
             if (searchModel is null)
@@ -163,7 +181,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return model;
         }
 
-        public ScheduleLogModel GetScheduleTaskEventById(int id)
+        /// <inheritdoc/>
+        public virtual ScheduleLogModel GetScheduleTaskEventById(int id)
         {
             var logItem = _scheduleTaskEventRepository.GetById(id);
             if (logItem is null)
@@ -177,12 +196,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return ToModel(logItem, tasks, averages);
         }
 
-        public void ClearLog()
+        /// <inheritdoc/>
+        public virtual void ClearLog()
         {
             _scheduleTaskEventRepository.Truncate();
         }
 
-        public IList<SelectListItem> GetAvailableTasks()
+        /// <inheritdoc/>
+        public virtual IList<SelectListItem> GetAvailableTasks()
         {
             var tasks = GetAllTasks();
 
@@ -193,7 +214,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
                 .ToList();
         }
 
-        public IList<SelectListItem> GetAvailableStates()
+        /// <inheritdoc/>
+        public virtual IList<SelectListItem> GetAvailableStates()
         {
             var states = new List<SelectListItem>
             {
@@ -204,7 +226,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return states;
         }
 
-        public IList<SelectListItem> GetAvailableTriggerTypes()
+        /// <inheritdoc/>
+        public virtual IList<SelectListItem> GetAvailableTriggerTypes()
         {
             var triggerTypes = new List<SelectListItem>
             {
@@ -215,7 +238,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return triggerTypes;
         }
 
-        public void PruneEvents()
+        /// <inheritdoc/>
+        public virtual void PruneEvents()
         {
             _scheduleTaskEventRepository.Delete(p => p.EventStartDateUtc < _currentDateTimeHelper.UtcNow.AddDays(_settings.LogExpiryDays * -1));
         }

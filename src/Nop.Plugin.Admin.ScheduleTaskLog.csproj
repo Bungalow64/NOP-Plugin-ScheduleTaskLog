@@ -11,6 +11,10 @@
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>..\..\..\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\Nop.Plugin.Admin.ScheduleTaskLog.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="logo.png" />
     <None Remove="plugin.json" />

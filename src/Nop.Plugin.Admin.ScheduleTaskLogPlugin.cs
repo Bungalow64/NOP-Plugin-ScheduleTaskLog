@@ -26,12 +26,23 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
         private readonly IScheduleTaskService _scheduleTaskService;
         private readonly IWebHelper _webHelper;
 
+        /// <summary>
+        /// Whether the widget should be hidden
+        /// </summary>
         public bool HideInWidgetList => true;
 
         #endregion
 
         #region Ctor
 
+        /// <summary>
+        /// Creates an instance of <see cref="ScheduleTaskLogPlugin"/>
+        /// </summary>
+        /// <param name="localizationService"></param>
+        /// <param name="widgetSettings"></param>
+        /// <param name="settingService"></param>
+        /// <param name="scheduleTaskService"></param>
+        /// <param name="webHelper"></param>
         public ScheduleTaskLogPlugin(
             ILocalizationService localizationService,
             WidgetSettings widgetSettings,
@@ -157,11 +168,20 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
             base.Uninstall();
         }
 
+        /// <summary>
+        /// Gets the list of widget zones
+        /// </summary>
+        /// <returns></returns>
         public IList<string> GetWidgetZones()
         {
             return new List<string> { AdminWidgetZones.ScheduleTaskListButtons };
         }
 
+        /// <summary>
+        /// Gets the name of the widget to use
+        /// </summary>
+        /// <param name="widgetZone">The widget zone specified</param>
+        /// <returns>The name of the widget</returns>
         public string GetWidgetViewComponentName(string widgetZone)
         {
             return ScheduleTaskLogPluginDefaults.WIDGETS_SCHEDULE_TASK_LOG_BUTTON_NAME;

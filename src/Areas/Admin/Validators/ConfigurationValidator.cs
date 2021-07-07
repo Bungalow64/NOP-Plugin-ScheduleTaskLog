@@ -12,6 +12,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Validators
     {
         #region Ctor
 
+        /// <summary>
+        /// Creates the validator for the <see cref="ConfigurationModel"/>
+        /// </summary>
+        /// <param name="localizationService"></param>
         public ConfigurationValidator(ILocalizationService localizationService)
         {
             RuleFor(model => model.LogExpiryDays)
