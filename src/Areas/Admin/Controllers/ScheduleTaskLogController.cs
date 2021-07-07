@@ -168,7 +168,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// Gets the page showing the configuration options for the plugin
         /// </summary>
         /// <returns>Returns the configuration page</returns>
-        public IActionResult Configure()
+        public virtual IActionResult Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
             {
@@ -191,7 +191,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// <returns>Returns the configuration page</returns>
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Configure(ConfigurationModel model)
+        public virtual IActionResult Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
             {

@@ -22,7 +22,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tasks
         /// <summary>
         /// Executes the task
         /// </summary>
-        public void Execute()
+        public virtual void Execute()
         {
             _scheduleTaskEventService.PruneEvents();
         }
