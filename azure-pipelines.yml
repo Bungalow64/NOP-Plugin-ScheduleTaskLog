@@ -25,31 +25,32 @@ pool:
 steps:
 - checkout: Plugin
   persistCredentials: true
-- checkout: NOP_4_40
-  persistCredentials: true
-  submodules: true
+#- checkout: NOP_4_40
+#  submodules: true
 - checkout: NOP_4_30
-  persistCredentials: true
   submodules: true
 
-- script: |
-    git config --global user.email "jamieburnsdeveloper@gmail.com"
-    git config --global user.name "Jamie Burns"
-  displayName: 'Set git details'
+#- script: |
+#    git config --global user.email "jamieburnsdeveloper@gmail.com"
+#    git config --global user.name "Jamie Burns"
+#  displayName: 'Set git details'
 
 - script: |
+    cd $(Build.SourcesDirectory)/NOP-4.30
+    git status
+    git pull
     cd $(Build.SourcesDirectory)/NOP-4.30/CustomPlugins/Nop.Plugin.Admin.ScheduleTaskLog
     dir
     git status
     git pull
   displayName: 'Get latest submodule - 4.30'
 
-- script: |
-    cd $(Build.SourcesDirectory)/NOP-4.40/src/CustomPlugins/Nop.Plugin.Admin.ScheduleTaskLog
-    dir
-    git status
-    git pull
-  displayName: 'Get latest submodule - 4.40'
+#- script: |
+#    cd $(Build.SourcesDirectory)/NOP-4.40/src/CustomPlugins/Nop.Plugin.Admin.ScheduleTaskLog
+#    dir
+#    git status
+#    git pull
+#  displayName: 'Get latest submodule - 4.40'
 
 #- task: DotNetCoreCLI@2
 #  inputs:
