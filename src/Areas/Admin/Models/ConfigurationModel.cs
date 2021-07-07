@@ -6,7 +6,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models
     /// <summary>
     /// The model containing the configuration settings for the plugin
     /// </summary>
-    public record ConfigurationModel : BaseNopModel
+    public partial record ConfigurationModel : BaseNopModel
     {
         /// <summary>
         /// Whether the log should be disabled

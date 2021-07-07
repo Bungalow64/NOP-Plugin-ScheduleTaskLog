@@ -21,7 +21,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
     /// <summary>
     /// Handles all interactions with the schedule task event log
     /// </summary>
-    public class ScheduleTaskEventService : IScheduleTaskEventService
+    public partial class ScheduleTaskEventService : IScheduleTaskEventService
     {
         private readonly ICurrentDateTimeHelper _currentDateTimeHelper;
         private readonly IDateTimeHelper _dateTimeHelper;

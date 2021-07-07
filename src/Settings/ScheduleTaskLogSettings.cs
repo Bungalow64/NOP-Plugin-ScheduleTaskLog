@@ -5,7 +5,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Settings
     /// <summary>
     /// The settings of the plugin
     /// </summary>
-    public class ScheduleTaskLogSettings : ISettings
+    public partial class ScheduleTaskLogSettings : ISettings
     {
         /// <summary>
         /// Gets or sets whether logging should be disabled

@@ -6,7 +6,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tasks
     /// <summary>
     /// The definition of the task that prunes the schedule task log
     /// </summary>
-    public class PruneScheduleTaskLogEventsTask : IScheduleTask
+    public partial class PruneScheduleTaskLogEventsTask : IScheduleTask
     {
         private readonly IScheduleTaskEventService _scheduleTaskEventService;
 
@@ -23,7 +23,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tasks
         /// Executes the task
         /// </summary>
         /// <returns>The task to be awaited</returns>
-        public System.Threading.Tasks.Task ExecuteAsync()
+        public virtual System.Threading.Tasks.Task ExecuteAsync()
         {
             return _scheduleTaskEventService.PruneEventsAsync();
         }

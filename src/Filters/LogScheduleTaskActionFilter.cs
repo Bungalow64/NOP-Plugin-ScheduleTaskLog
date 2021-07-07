@@ -30,7 +30,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Filters
         /// Detects of the action is for a task execution (either scheduled or manual) and redirects to the plugin controller actions
         /// </summary>
         /// <param name="context"></param>
-        public void OnActionExecuting(ActionExecutingContext context)
+        public virtual void OnActionExecuting(ActionExecutingContext context)
         {
             if (_settings.DisableLog)
             {
@@ -68,7 +68,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Filters
         }
 
         /// <inheritdoc/>
-        public void OnActionExecuted(ActionExecutedContext context)
+        public virtual void OnActionExecuted(ActionExecutedContext context)
         {
         }
     }
