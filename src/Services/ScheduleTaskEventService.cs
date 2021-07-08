@@ -150,11 +150,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
                     {
                         query = query.Where(p => p.ScheduleTaskId == searchModel.ScheduleTaskId);
                     }
-                    if (searchModel.StateId > 0)
+                    if (searchModel.StateId > 0 && searchModel.StateId <= ERROR_STATE_ID)
                     {
                         query = query.Where(p => p.IsError == (searchModel.StateId == ERROR_STATE_ID));
                     }
-                    if (searchModel.TriggerTypeId > 0)
+                    if (searchModel.TriggerTypeId > 0 && searchModel.TriggerTypeId <= TRIGGER_USER_ID)
                     {
                         query = query.Where(p => p.IsStartedManually == (searchModel.TriggerTypeId == TRIGGER_USER_ID));
                     }
