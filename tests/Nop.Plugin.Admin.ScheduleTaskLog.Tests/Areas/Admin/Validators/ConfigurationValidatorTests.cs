@@ -3,7 +3,6 @@ using Moq;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Validators;
 using Nop.Services.Localization;
-using Nop.Tests;
 using NUnit.Framework;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Validators
