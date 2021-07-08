@@ -22,6 +22,7 @@ using RootController = Nop.Web.Controllers;
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 {
     [NonParallelizable]
+    [TestFixture]
     public class LogScheduleTaskActionFilterTests
     {
         private Mock<ScheduleTaskLogSettings> _settings;
