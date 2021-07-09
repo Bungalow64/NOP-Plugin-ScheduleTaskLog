@@ -1,11 +1,11 @@
 ﻿{
   "Group": "Admin",
-  "FriendlyName": "Schedule task log",
+  "FriendlyName": "Enhanced Schedule Task Monitoring",
   "SystemName": "Admin.ScheduleTaskLog",
-  "Version": "1.17",
+  "Version": "1.00",
   "SupportedVersions": [ "4.30" ],
   "Author": "Bungalow64 Technologies",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Admin.ScheduleTaskLog.dll",
-  "Description": "This plugin logs schedule task activity, and shows this data to admin users"
+  "Description": "This plugin monitors schedule task activity, and shows this data to admin users"
 }
