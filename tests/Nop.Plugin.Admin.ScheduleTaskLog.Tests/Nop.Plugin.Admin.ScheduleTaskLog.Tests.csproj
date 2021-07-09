@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Tests\Nop.Tests\Nop.Tests.csproj" />
     <ProjectReference Include="..\..\src\Nop.Plugin.Admin.ScheduleTaskLog.csproj" />
   </ItemGroup>
 

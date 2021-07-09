@@ -7,6 +7,9 @@ using Nop.Plugin.Admin.ScheduleTaskLog.Services;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
 {
+    /// <summary>
+    /// Registers the plugin dependencies
+    /// </summary>
     public class DependencyRegistrar : IDependencyRegistrar
     {
         /// <summary>
@@ -21,6 +24,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
             services.AddScoped<IScheduleTaskEventService, ScheduleTaskEventService>();
         }
 
+        /// <summary>
+        /// Order of this registration
+        /// </summary>
         public int Order => 1;
     }
 }

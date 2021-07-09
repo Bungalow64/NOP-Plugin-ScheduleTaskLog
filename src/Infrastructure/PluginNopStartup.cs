@@ -7,8 +7,16 @@ using Nop.Plugin.Admin.ScheduleTaskLog.Filters;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
 {
+    /// <summary>
+    /// Handles the startup of the plugin
+    /// </summary>
     public class PluginNopStartup : INopStartup
     {
+        /// <summary>
+        /// Configures the services required by the plugin
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<RazorViewEngineOptions>(options =>
@@ -22,10 +30,17 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
             });
         }
 
+        /// <summary>
+        /// Configures the application
+        /// </summary>
+        /// <param name="application"></param>
         public void Configure(IApplicationBuilder application)
         {
         }
 
+        /// <summary>
+        /// The order of the startup
+        /// </summary>
         public int Order => 11;
     }
 }

@@ -3,16 +3,27 @@ using Nop.Services.Tasks;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tasks
 {
-    public class PruneScheduleTaskLogEventsTask : IScheduleTask
+    /// <summary>
+    /// The definition of the task that prunes the schedule task log
+    /// </summary>
+    public partial class PruneScheduleTaskLogEventsTask : IScheduleTask
     {
         private readonly IScheduleTaskEventService _scheduleTaskEventService;
 
+        /// <summary>
+        /// Creates an instance of <see cref="PruneScheduleTaskLogEventsTask"/>
+        /// </summary>
+        /// <param name="scheduleTaskEventService"></param>
         public PruneScheduleTaskLogEventsTask(IScheduleTaskEventService scheduleTaskEventService)
         {
             _scheduleTaskEventService = scheduleTaskEventService;
         }
 
-        public System.Threading.Tasks.Task ExecuteAsync()
+        /// <summary>
+        /// Executes the task
+        /// </summary>
+        /// <returns>The task to be awaited</returns>
+        public virtual System.Threading.Tasks.Task ExecuteAsync()
         {
             return _scheduleTaskEventService.PruneEventsAsync();
         }

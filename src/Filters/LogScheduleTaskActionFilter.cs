@@ -9,17 +9,28 @@ using RootController = Nop.Web.Controllers;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Filters
 {
+    /// <summary>
+    /// Filter that intercepts calls to the task execution actions, and redirects to the plugin-specific actions that includes the extra logging
+    /// </summary>
     public class LogScheduleTaskActionFilter : IActionFilter
     {
         private readonly ScheduleTaskLogSettings _settings;
         private const string CONTROLLER_NAME = "TaskRunner";
 
+        /// <summary>
+        /// Creates an instance of <see cref="LogScheduleTaskActionFilter"/>
+        /// </summary>
+        /// <param name="settings"></param>
         public LogScheduleTaskActionFilter(ScheduleTaskLogSettings settings)
         {
             _settings = settings;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        /// <summary>
+        /// Detects of the action is for a task execution (either scheduled or manual) and redirects to the plugin controller actions
+        /// </summary>
+        /// <param name="context"></param>
+        public virtual void OnActionExecuting(ActionExecutingContext context)
         {
             if (_settings.DisableLog)
             {
@@ -56,7 +67,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Filters
             }
         }
 
-        public void OnActionExecuted(ActionExecutedContext context)
+        /// <inheritdoc/>
+        public virtual void OnActionExecuted(ActionExecutedContext context)
         {
         }
     }

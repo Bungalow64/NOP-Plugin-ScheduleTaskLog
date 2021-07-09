@@ -4,10 +4,15 @@ using Nop.Data.Mapping;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Mapping
 {
+    /// <summary>
+    /// Backward compatibility of table naming
+    /// </summary>
     public partial class NameCompatibility : INameCompatibility
     {
-        public Dictionary<Type, string> TableNames => new Dictionary<Type, string>();
+        /// <inheritdoc/>
+        public Dictionary<Type, string> TableNames => new();
 
-        public Dictionary<(Type, string), string> ColumnName => new Dictionary<(Type, string), string>();
+        /// <inheritdoc/>
+        public Dictionary<(Type, string), string> ColumnName => new();
     }
 }

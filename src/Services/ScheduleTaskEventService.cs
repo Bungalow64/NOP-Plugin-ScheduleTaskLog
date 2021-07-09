@@ -18,7 +18,10 @@ using Nop.Web.Framework.Models.Extensions;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
 {
-    public class ScheduleTaskEventService : IScheduleTaskEventService
+    /// <summary>
+    /// Handles all interactions with the schedule task event log
+    /// </summary>
+    public partial class ScheduleTaskEventService : IScheduleTaskEventService
     {
         private readonly ICurrentDateTimeHelper _currentDateTimeHelper;
         private readonly IDateTimeHelper _dateTimeHelper;
@@ -35,6 +38,17 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
         private const int TRIGGER_SCHEDULE_ID = 1;
         private const int TRIGGER_USER_ID = 2;
 
+        /// <summary>
+        /// Creates an instance of <see cref="ScheduleTaskEventService"/>
+        /// </summary>
+        /// <param name="currentDateTimeHelper"></param>
+        /// <param name="dateTimeHelper"></param>
+        /// <param name="scheduleTaskRepository"></param>
+        /// <param name="scheduleTaskEventRepository"></param>
+        /// <param name="localizationService"></param>
+        /// <param name="logger"></param>
+        /// <param name="customerService"></param>
+        /// <param name="settings"></param>
         public ScheduleTaskEventService(
             ICurrentDateTimeHelper currentDateTimeHelper,
             IDateTimeHelper dateTimeHelper,
@@ -55,6 +69,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             _settings = settings;
         }
 
+        /// <inheritdoc/>
         public virtual async Task<ScheduleTaskEvent> RecordEventStartAsync(ScheduleTask scheduleTask, int? customerId = null)
         {
             try
@@ -73,6 +88,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
         }
 
+        /// <inheritdoc/>
         public virtual async Task<ScheduleTaskEvent> RecordEventEndAsync(ScheduleTaskEvent scheduleTaskEvent)
         {
             if (scheduleTaskEvent is null)
@@ -93,6 +109,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
         }
 
+        /// <inheritdoc/>
         public virtual async Task<ScheduleTaskEvent> RecordEventErrorAsync(ScheduleTaskEvent scheduleTaskEvent, Exception exc)
         {
             if (scheduleTaskEvent is null)
@@ -113,6 +130,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             }
         }
 
+        /// <inheritdoc/>
         public virtual async Task<ScheduleLogListModel> PrepareLogListModelAsync(ScheduleLogSearchModel searchModel)
         {
             if (searchModel is null)
@@ -132,11 +150,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
                     {
                         query = query.Where(p => p.ScheduleTaskId == searchModel.ScheduleTaskId);
                     }
-                    if (searchModel.StateId > 0)
+                    if (searchModel.StateId > 0 && searchModel.StateId <= ERROR_STATE_ID)
                     {
                         query = query.Where(p => p.IsError == (searchModel.StateId == ERROR_STATE_ID));
                     }
-                    if (searchModel.TriggerTypeId > 0)
+                    if (searchModel.TriggerTypeId > 0 && searchModel.TriggerTypeId <= TRIGGER_USER_ID)
                     {
                         query = query.Where(p => p.IsStartedManually == (searchModel.TriggerTypeId == TRIGGER_USER_ID));
                     }
@@ -163,7 +181,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return model;
         }
 
-        public async Task<ScheduleLogModel> GetScheduleTaskEventByIdAsync(int id)
+        /// <inheritdoc/>
+        public virtual async Task<ScheduleLogModel> GetScheduleTaskEventByIdAsync(int id)
         {
             var logItem = await _scheduleTaskEventRepository.GetByIdAsync(id);
             if (logItem is null)
@@ -177,12 +196,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return await ToModelAsync(logItem, tasks, averages);
         }
 
-        public Task ClearLogAsync()
+        /// <inheritdoc/>
+        public virtual Task ClearLogAsync()
         {
             return _scheduleTaskEventRepository.TruncateAsync();
         }
 
-        public async Task<IList<SelectListItem>> GetAvailableTasksAsync()
+        /// <inheritdoc/>
+        public virtual async Task<IList<SelectListItem>> GetAvailableTasksAsync()
         {
             var tasks = await GetAllTasksAsync();
 
@@ -193,7 +214,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
                 .ToListAsync();
         }
 
-        public async Task<IList<SelectListItem>> GetAvailableStatesAsync()
+        /// <inheritdoc/>
+        public virtual async Task<IList<SelectListItem>> GetAvailableStatesAsync()
         {
             var states = new List<SelectListItem>
             {
@@ -204,7 +226,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return states;
         }
 
-        public async Task<IList<SelectListItem>> GetAvailableTriggerTypesAsync()
+        /// <inheritdoc/>
+        public virtual async Task<IList<SelectListItem>> GetAvailableTriggerTypesAsync()
         {
             var triggerTypes = new List<SelectListItem>
             {
@@ -215,7 +238,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
             return triggerTypes;
         }
 
-        public Task PruneEventsAsync()
+        /// <inheritdoc/>
+        public virtual Task PruneEventsAsync()
         {
             return _scheduleTaskEventRepository.DeleteAsync(p => p.EventStartDateUtc < _currentDateTimeHelper.UtcNow.AddDays(_settings.LogExpiryDays * -1));
         }
