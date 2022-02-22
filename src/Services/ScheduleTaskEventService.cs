@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Nop.Core.Domain.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Data;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
 using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
@@ -15,6 +11,10 @@ using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Framework.Models.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Services
 {

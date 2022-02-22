@@ -1,17 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
 using Nop.Plugin.Admin.ScheduleTaskLog.Services;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
+using Nop.Services.ScheduleTasks;
 using Nop.Services.Security;
-using Nop.Services.Tasks;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
-using Task = Nop.Services.Tasks.Task;
+using System;
+using System.Threading.Tasks;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 {
@@ -27,6 +26,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         private readonly IPermissionService _permissionService;
         private readonly IScheduleTaskService _scheduleTaskService;
         private readonly IScheduleTaskEventService _scheduleTaskEventService;
+        private readonly IScheduleTaskRunner _taskRunner;
         private readonly IWorkContext _workContext;
 
         #endregion
@@ -41,6 +41,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// <param name="permissionService"></param>
         /// <param name="scheduleTaskService"></param>
         /// <param name="scheduleTaskEventService"></param>
+        /// <param name="taskRunner"></param>
         /// <param name="workContext"></param>
         public TaskRunnerController(
             ILocalizationService localizationService,
@@ -48,6 +49,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             IPermissionService permissionService,
             IScheduleTaskService scheduleTaskService,
             IScheduleTaskEventService scheduleTaskEventService,
+            IScheduleTaskRunner taskRunner,
             IWorkContext workContext)
         {
             _localizationService = localizationService;
@@ -55,6 +57,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
             _permissionService = permissionService;
             _scheduleTaskService = scheduleTaskService;
             _scheduleTaskEventService = scheduleTaskEventService;
+            _taskRunner = taskRunner;
             _workContext = workContext;
         }
 
@@ -87,8 +90,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
                 scheduleTaskEvent = await _scheduleTaskEventService.RecordEventStartAsync(scheduleTask, (await _workContext.GetCurrentCustomerAsync()).Id);
 
-                var task = new Task(scheduleTask) { Enabled = true };
-                await task.ExecuteAsync(true, false);
+                await _taskRunner.ExecuteAsync(scheduleTask, true, true, false);
 
                 await _scheduleTaskEventService.RecordEventEndAsync(scheduleTaskEvent);
 
@@ -124,10 +126,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
 
             var scheduleTaskEvent = await _scheduleTaskEventService.RecordEventStartAsync(scheduleTask);
 
-            var task = new Task(scheduleTask);
             try
             {
-                await task.ExecuteAsync(true);
+                await _taskRunner.ExecuteAsync(scheduleTask, true, true);
 
                 await _scheduleTaskEventService.RecordEventEndAsync(scheduleTaskEvent);
             }

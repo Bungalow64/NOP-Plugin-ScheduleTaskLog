@@ -39,7 +39,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Validators
             {
                 LogExpiryDays = days
             };
-            validator.ShouldNotHaveValidationErrorFor(x => x.LogExpiryDays, model);
+            var result = validator.TestValidate(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.LogExpiryDays);
         }
 
         [Test]
@@ -54,7 +55,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Validators
             {
                 LogExpiryDays = days
             };
-            validator.ShouldHaveValidationErrorFor(x => x.LogExpiryDays, model);
+            var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x.LogExpiryDays);
         }
     }
 }

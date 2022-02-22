@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core.Infrastructure;
 using Nop.Plugin.Admin.ScheduleTaskLog.Filters;
+using Nop.Plugin.Admin.ScheduleTaskLog.Helpers;
+using Nop.Plugin.Admin.ScheduleTaskLog.Services;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
 {
@@ -19,6 +21,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Infrastructure
         /// <param name="configuration"></param>
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<ICurrentDateTimeHelper, CurrentDateTimeHelper>();
+            services.AddScoped<IScheduleTaskEventService, ScheduleTaskEventService>();
+
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationExpanders.Add(new ViewLocationExpander());

@@ -4,7 +4,7 @@
 @{
     Layout = "_AdminLayout";
     ViewBag.PageTitle = T("Plugins.Admin.ScheduleTaskLog.ListTitle").Text;
-    Html.SetActiveMenuItemSystemName("Schedule tasks");
+    NopHtml.SetActiveMenuItemSystemName("Schedule tasks");
     const string hideSearchBlockAttributeName = "ScheduleTaskLogPage.HideSearchBlock";
     var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
 }

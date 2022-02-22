@@ -1,10 +1,10 @@
-﻿using System.Data;
-using FluentMigrator.Builders.Create.Table;
+﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Tasks;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Data.Extensions;
 using Nop.Data.Mapping.Builders;
 using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
+using System.Data;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Mapping.Builders
 {
