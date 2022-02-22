@@ -1,0 +1,20 @@
+[
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.30",
+    "DirectoryPath": "4.30/Admin.ScheduleTaskLog/",
+    "SystemName": "Admin.ScheduleTaskLog"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.40",
+    "DirectoryPath": "4.40/Admin.ScheduleTaskLog/",
+    "SystemName": "Admin.ScheduleTaskLog"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.50",
+    "DirectoryPath": "4.50/Admin.ScheduleTaskLog/",
+    "SystemName": "Admin.ScheduleTaskLog"
+  }
+]

@@ -1,5 +1,5 @@
 ﻿using Nop.Plugin.Admin.ScheduleTaskLog.Services;
-using Nop.Services.Tasks;
+using Nop.Services.ScheduleTasks;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tasks
 {

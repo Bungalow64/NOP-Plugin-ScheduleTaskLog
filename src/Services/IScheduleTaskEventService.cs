@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Nop.Core.Domain.Tasks;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
 using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
 

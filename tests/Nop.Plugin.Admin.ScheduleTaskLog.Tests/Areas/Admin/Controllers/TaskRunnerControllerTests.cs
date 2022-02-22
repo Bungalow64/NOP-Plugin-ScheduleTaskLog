@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Nop.Core;
+using Nop.Core.Domain.ScheduleTasks;
+using Nop.Core.Infrastructure;
+using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers;
+using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
 using Nop.Plugin.Admin.ScheduleTaskLog.Services;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
+using Nop.Services.ScheduleTasks;
 using Nop.Services.Security;
-using Nop.Services.Tasks;
 using NUnit.Framework;
-using Moq;
-using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers;
-using Task = System.Threading.Tasks.Task;
-using Nop.Core.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using static Nop.Tests.BaseNopTest;
-using Microsoft.AspNetCore.Http;
-using Nop.Core.Domain.Tasks;
 using System;
-using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
+using static Nop.Tests.BaseNopTest;
+using Task = System.Threading.Tasks.Task;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
 {
@@ -31,6 +31,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
         private Mock<IScheduleTaskService> _scheduleTaskService;
         private Mock<IScheduleTaskEventService> _scheduleTaskEventService;
         private Mock<IWorkContext> _workContext;
+        private Mock<IScheduleTaskRunner> _taskRunner;
         private Mock<IWebHelper> _webHelper;
 
         [SetUp]
@@ -42,6 +43,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
             _scheduleTaskService = new Mock<IScheduleTaskService>(MockBehavior.Strict);
             _scheduleTaskEventService = new Mock<IScheduleTaskEventService>(MockBehavior.Strict);
             _workContext = new Mock<IWorkContext>(MockBehavior.Strict);
+            _taskRunner = new Mock<IScheduleTaskRunner>(MockBehavior.Strict);
             _webHelper = new Mock<IWebHelper>(MockBehavior.Strict);
 
             var services = new ServiceCollection();
@@ -58,6 +60,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
                 _permissionService.Object,
                 _scheduleTaskService.Object,
                 _scheduleTaskEventService.Object,
+                _taskRunner.Object,
                 _workContext.Object);
         }
 
