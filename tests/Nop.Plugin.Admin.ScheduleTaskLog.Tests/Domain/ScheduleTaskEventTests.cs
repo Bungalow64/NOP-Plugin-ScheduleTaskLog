@@ -1,9 +1,9 @@
-﻿using System;
-using Moq;
-using Nop.Core.Domain.Tasks;
+﻿using Moq;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Plugin.Admin.ScheduleTaskLog.Domain;
 using Nop.Plugin.Admin.ScheduleTaskLog.Helpers;
 using NUnit.Framework;
+using System;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 {

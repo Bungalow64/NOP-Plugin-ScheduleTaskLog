@@ -11,8 +11,8 @@ using Nop.Plugin.Admin.ScheduleTaskLog.Settings;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
+using Nop.Services.ScheduleTasks;
 using Nop.Services.Security;
-using Nop.Services.Tasks;
 using Nop.Web.Areas.Admin.Controllers;
 using Nop.Web.Areas.Admin.Factories;
 using NUnit.Framework;
@@ -72,7 +72,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
         private static Controller CreateRootScheduleTaskController()
         {
             return new RootController.ScheduleTaskController(
-                Mock.Of<IScheduleTaskService>());
+                Mock.Of<IScheduleTaskService>(),
+                Mock.Of<IScheduleTaskRunner>());
         }
 
         private static Controller CreateAdminScheduleTaskController()
@@ -83,7 +84,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 Mock.Of<INotificationService>(),
                 Mock.Of<IPermissionService>(),
                 Mock.Of<IScheduleTaskModelFactory>(),
-                Mock.Of<IScheduleTaskService>());
+                Mock.Of<IScheduleTaskService>(),
+                Mock.Of<IScheduleTaskRunner>());
         }
 
         [Test]

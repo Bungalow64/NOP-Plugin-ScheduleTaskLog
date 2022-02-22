@@ -1,7 +1,7 @@
-﻿using System;
-using Nop.Core;
-using Nop.Core.Domain.Tasks;
+﻿using Nop.Core;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Plugin.Admin.ScheduleTaskLog.Helpers;
+using System;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Domain
 {

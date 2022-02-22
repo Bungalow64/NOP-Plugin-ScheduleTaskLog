@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Moq;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Tasks;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Core.Infrastructure.Mapper;
 using Nop.Data;
 using Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Models;
@@ -21,6 +16,11 @@ using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 {

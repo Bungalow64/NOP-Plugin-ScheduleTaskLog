@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Domain.Cms;
-using Nop.Core.Domain.Tasks;
+using Nop.Core.Domain.ScheduleTasks;
 using Nop.Plugin.Admin.ScheduleTaskLog.Settings;
 using Nop.Services.Cms;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
-using Nop.Services.Tasks;
+using Nop.Services.ScheduleTasks;
 using Nop.Web.Framework.Infrastructure;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 
 namespace Nop.Plugin.Admin.ScheduleTaskLog
@@ -83,7 +83,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
                 LogExpiryDays = 14
             });
 
-            await _localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
+            await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
             {
                 ["Plugins.Admin.ScheduleTaskLog.ListTitle"] = "Schedule task log",
                 ["Plugins.Admin.ScheduleTaskLog.ListViewTitle"] = "Schedule task log entry",
