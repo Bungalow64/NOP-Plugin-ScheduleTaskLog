@@ -3,7 +3,7 @@
   "FriendlyName": "Enhanced Schedule Task Monitoring",
   "SystemName": "Admin.ScheduleTaskLog",
   "Version": "1.00",
-  "SupportedVersions": [ "4.50" ],
+  "SupportedVersions": [ "4.60" ],
   "Author": "Bungalow64 Technologies",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Admin.ScheduleTaskLog.dll",
