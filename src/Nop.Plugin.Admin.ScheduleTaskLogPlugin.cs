@@ -20,7 +20,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
     /// <summary>
     /// Plugin class handling install/uninstall
     /// </summary>
-    public class ScheduleTaskLogPlugin : BasePlugin, IMiscPlugin, IWidgetPlugin
+    public class ScheduleTaskLogPlugin : BasePlugin, IWidgetPlugin
     {
         #region Fields
 
