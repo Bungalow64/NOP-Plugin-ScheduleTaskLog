@@ -41,6 +41,30 @@ steps:
 - checkout: NOP_4_60
   submodules: true
 
+- task: UseDotNet@2
+  displayName: 'Use .NET 7 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '7.0.x'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 3.1 Core SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 5 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '5.0.x'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 6 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
