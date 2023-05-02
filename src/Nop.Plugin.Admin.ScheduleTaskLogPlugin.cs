@@ -1,6 +1,7 @@
 ﻿using Nop.Core;
 using Nop.Core.Domain.Cms;
 using Nop.Core.Domain.ScheduleTasks;
+using Nop.Plugin.Admin.ScheduleTaskLog.Components;
 using Nop.Plugin.Admin.ScheduleTaskLog.Settings;
 using Nop.Services.Cms;
 using Nop.Services.Common;
@@ -9,6 +10,7 @@ using Nop.Services.Localization;
 using Nop.Services.Plugins;
 using Nop.Services.ScheduleTasks;
 using Nop.Web.Framework.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
@@ -18,7 +20,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
     /// <summary>
     /// Plugin class handling install/uninstall
     /// </summary>
-    public class ScheduleTaskLogPlugin : BasePlugin, IMiscPlugin, IWidgetPlugin
+    public class ScheduleTaskLogPlugin : BasePlugin, IWidgetPlugin
     {
         #region Fields
 
@@ -184,9 +186,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog
         /// </summary>
         /// <param name="widgetZone">The widget zone specified</param>
         /// <returns>The name of the widget</returns>
-        public string GetWidgetViewComponentName(string widgetZone)
+        public Type GetWidgetViewComponent(string widgetZone)
         {
-            return ScheduleTaskLogPluginDefaults.WIDGETS_SCHEDULE_TASK_LOG_BUTTON_NAME;
+            return typeof(WidgetsScheduleTaskLogButtonComponent);
         }
 
         #endregion
