@@ -1,5 +1,9 @@
 resources:
  repositories:
+   - repository: NOP_4_60
+     type: github
+     endpoint: Bungalow64
+     name: Bungalow64/NOP-4.60
    - repository: NOP_4_40
      type: github
      endpoint: Bungalow64
@@ -34,6 +38,8 @@ steps:
   submodules: true
 - checkout: NOP_4_50
   submodules: true
+- checkout: NOP_4_60
+  submodules: true
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -58,6 +64,13 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    command: 'build'
+    projects: '$(Build.SourcesDirectory)/NOP-4.60/**/*.sln'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration) - NOP 4.60'
+
+- task: DotNetCoreCLI@2
+  inputs:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.30/**/CustomPlugins/**/*.Tests.csproj'
   displayName: dotnet test - NOP 4.30
@@ -74,6 +87,12 @@ steps:
    projects: '$(Build.SourcesDirectory)/NOP-4.50/**/CustomPlugins/**/*.Tests.csproj'
   displayName: dotnet test - NOP 4.50
 
+- task: DotNetCoreCLI@2
+  inputs:
+   command: test
+   projects: '$(Build.SourcesDirectory)/NOP-4.60/**/CustomPlugins/**/*.Tests.csproj'
+  displayName: dotnet test - NOP 4.60
+
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.30'
 
@@ -82,6 +101,9 @@ steps:
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.50/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.50/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.50'
+
+- powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.60/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.60/Admin.ScheduleTaskLog' -ItemType Directory }
+  displayName: 'Check and create directory - 4.60'
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-Plugin-ScheduleTaskLog\package\uploadedItems.json' -Destination '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy manifest file'
@@ -94,6 +116,9 @@ steps:
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.50\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.50\Admin.ScheduleTaskLog' -Recurse
   displayName: 'Copy plugin - 4.50'
+
+- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.60\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.60\Admin.ScheduleTaskLog' -Recurse
+  displayName: 'Copy plugin - 4.60'
 
 - powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
   displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
