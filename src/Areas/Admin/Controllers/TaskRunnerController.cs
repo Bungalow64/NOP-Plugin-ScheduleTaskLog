@@ -70,7 +70,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// </summary>
         /// <param name="id">The id of the task</param>
         /// <returns>The list page of schedule tasks</returns>
-        [Area(AreaNames.Admin)]
+        [Area(AreaNames.ADMIN)]
         [AutoValidateAntiforgeryToken]
         [ValidateIpAddress]
         [AuthorizeAdmin]
