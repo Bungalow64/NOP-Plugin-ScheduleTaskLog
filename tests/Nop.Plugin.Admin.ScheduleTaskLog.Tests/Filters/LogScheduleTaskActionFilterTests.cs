@@ -99,7 +99,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -155,13 +155,13 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.NotNull(context.Result);
-            Assert.IsInstanceOf<RedirectToRouteResult>(context.Result);
+            ClassicAssert.NotNull(context.Result);
+            ClassicAssert.IsInstanceOf<RedirectToRouteResult>(context.Result);
             var castResult = (RedirectToRouteResult)context.Result;
-            Assert.AreEqual("TaskRunner", castResult.RouteValues["controller"]);
-            Assert.AreEqual("RunTask", castResult.RouteValues["action"]);
-            Assert.AreEqual(actionArgumentValue, castResult.RouteValues["taskType"]);
-            Assert.AreEqual(string.Empty, castResult.RouteValues["area"]);
+            ClassicAssert.AreEqual("TaskRunner", castResult.RouteValues["controller"]);
+            ClassicAssert.AreEqual("RunTask", castResult.RouteValues["action"]);
+            ClassicAssert.AreEqual(actionArgumentValue, castResult.RouteValues["taskType"]);
+            ClassicAssert.AreEqual(string.Empty, castResult.RouteValues["area"]);
         }
 
         [Test]
@@ -185,7 +185,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -209,13 +209,13 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.NotNull(context.Result);
-            Assert.IsInstanceOf<RedirectToRouteResult>(context.Result);
+            ClassicAssert.NotNull(context.Result);
+            ClassicAssert.IsInstanceOf<RedirectToRouteResult>(context.Result);
             var castResult = (RedirectToRouteResult)context.Result;
-            Assert.AreEqual("TaskRunner", castResult.RouteValues["controller"]);
-            Assert.AreEqual("RunNow", castResult.RouteValues["action"]);
-            Assert.AreEqual(actionArgumentValue, castResult.RouteValues["id"]);
-            Assert.AreEqual("Admin", castResult.RouteValues["area"]);
+            ClassicAssert.AreEqual("TaskRunner", castResult.RouteValues["controller"]);
+            ClassicAssert.AreEqual("RunNow", castResult.RouteValues["action"]);
+            ClassicAssert.AreEqual(actionArgumentValue, castResult.RouteValues["id"]);
+            ClassicAssert.AreEqual("Admin", castResult.RouteValues["area"]);
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
 
         [Test]
@@ -287,7 +287,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             Create().OnActionExecuting(context);
 
-            Assert.Null(context.Result);
+            ClassicAssert.Null(context.Result);
         }
     }
 }

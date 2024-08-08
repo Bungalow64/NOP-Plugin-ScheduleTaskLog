@@ -25,14 +25,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
         [Test]
         public void Start_NullCurrentDateTimeHelper_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ClassicAssert.Throws<ArgumentNullException>(delegate
             { ScheduleTaskEvent.Start(null, new ScheduleTask()); });
         }
 
         [Test]
         public void Start_NullScheduleTask_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ClassicAssert.Throws<ArgumentNullException>(delegate
             { ScheduleTaskEvent.Start(_currentDateTimeHelper.Object, null); });
         }
 
@@ -45,7 +45,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             var data = ScheduleTaskEvent.Start(_currentDateTimeHelper.Object, new ScheduleTask());
 
-            Assert.AreEqual(expectedDate, data.EventStartDateUtc);
+            ClassicAssert.AreEqual(expectedDate, data.EventStartDateUtc);
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             var data = ScheduleTaskEvent.Start(_currentDateTimeHelper.Object, task);
 
-            Assert.AreEqual(1002, data.ScheduleTaskId);
+            ClassicAssert.AreEqual(1002, data.ScheduleTaskId);
         }
 
         #endregion
@@ -70,7 +70,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
         {
             var data = ScheduleTaskEvent.Start(_currentDateTimeHelper.Object, new ScheduleTask());
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ClassicAssert.Throws<ArgumentNullException>(delegate
             { data.End(null); });
         }
 
@@ -85,8 +85,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.End(_currentDateTimeHelper.Object);
 
-            Assert.False(data.IsError);
-            Assert.AreEqual(expectedDate, data.EventEndDateUtc);
+            ClassicAssert.False(data.IsError);
+            ClassicAssert.AreEqual(expectedDate, data.EventEndDateUtc);
         }
 
         [Test]
@@ -104,8 +104,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.End(_currentDateTimeHelper.Object);
 
-            Assert.AreEqual(expectedStartDate, data.EventStartDateUtc);
-            Assert.AreEqual(expectedEndDate, data.EventEndDateUtc);
+            ClassicAssert.AreEqual(expectedStartDate, data.EventStartDateUtc);
+            ClassicAssert.AreEqual(expectedEndDate, data.EventEndDateUtc);
         }
 
         #endregion
@@ -117,7 +117,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
         {
             var data = ScheduleTaskEvent.Start(_currentDateTimeHelper.Object, new ScheduleTask());
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ClassicAssert.Throws<ArgumentNullException>(delegate
             { data.Error(null, new Exception()); });
         }
 
@@ -132,8 +132,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, new Exception());
 
-            Assert.True(data.IsError);
-            Assert.AreEqual(expectedDate, data.EventEndDateUtc);
+            ClassicAssert.True(data.IsError);
+            ClassicAssert.AreEqual(expectedDate, data.EventEndDateUtc);
         }
 
         [Test]
@@ -151,8 +151,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, new Exception());
 
-            Assert.AreEqual(expectedStartDate, data.EventStartDateUtc);
-            Assert.AreEqual(expectedEndDate, data.EventEndDateUtc);
+            ClassicAssert.AreEqual(expectedStartDate, data.EventStartDateUtc);
+            ClassicAssert.AreEqual(expectedEndDate, data.EventEndDateUtc);
         }
 
         [Test]
@@ -172,9 +172,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, caughtException);
 
-            Assert.True(data.IsError);
-            Assert.AreEqual("This is a thrown exception", data.ExceptionMessage);
-            Assert.IsNotEmpty(data.ExceptionDetails);
+            ClassicAssert.True(data.IsError);
+            ClassicAssert.AreEqual("This is a thrown exception", data.ExceptionMessage);
+            ClassicAssert.IsNotEmpty(data.ExceptionDetails);
         }
 
         [Test]
@@ -186,9 +186,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, caughtException);
 
-            Assert.True(data.IsError);
-            Assert.Null(data.ExceptionMessage);
-            Assert.Null(data.ExceptionDetails);
+            ClassicAssert.True(data.IsError);
+            ClassicAssert.Null(data.ExceptionMessage);
+            ClassicAssert.Null(data.ExceptionDetails);
         }
 
         [Test]
@@ -208,9 +208,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, caughtException);
 
-            Assert.NotNull(data.ExceptionMessage);
-            Assert.AreEqual(200, data.ExceptionMessage.Length);
-            Assert.AreEqual("This is a thrown exception: xxxx", data.ExceptionMessage.Substring(0, 32));
+            ClassicAssert.NotNull(data.ExceptionMessage);
+            ClassicAssert.AreEqual(200, data.ExceptionMessage.Length);
+            ClassicAssert.AreEqual("This is a thrown exception: xxxx", data.ExceptionMessage.Substring(0, 32));
         }
 
         [Test]
@@ -230,7 +230,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.Error(_currentDateTimeHelper.Object, caughtException);
 
-            Assert.AreEqual(string.Empty, data.ExceptionMessage);
+            ClassicAssert.AreEqual(string.Empty, data.ExceptionMessage);
         }
 
         #endregion
@@ -246,8 +246,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Domain
 
             data.SetTriggeredManually(customerId);
 
-            Assert.True(data.IsStartedManually);
-            Assert.AreEqual(customerId, data.TriggeredByCustomerId);
+            ClassicAssert.True(data.IsStartedManually);
+            ClassicAssert.AreEqual(customerId, data.TriggeredByCustomerId);
         }
 
 
