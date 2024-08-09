@@ -30,6 +30,10 @@ trigger:
 
 variables:
   buildConfiguration: 'Release'
+  build_4_30: false
+  build_4_40: false
+  build_4_50: false
+  build_4_60: false
 
 pool:
  vmImage: 'ubuntu-latest'
@@ -95,6 +99,7 @@ steps:
     projects: '$(Build.SourcesDirectory)/NOP-4.30/**/*.sln'
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.30'
+  condition: and(succeeded(), eq('${{ variables.build_4_30 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -102,6 +107,7 @@ steps:
     projects: '$(Build.SourcesDirectory)/NOP-4.40/**/*.sln'
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.40'
+  condition: and(succeeded(), eq('${{ variables.build_4_40 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -109,6 +115,7 @@ steps:
     projects: '$(Build.SourcesDirectory)/NOP-4.50/**/*.sln'
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.50'
+  condition: and(succeeded(), eq('${{ variables.build_4_50 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -116,6 +123,7 @@ steps:
     projects: '$(Build.SourcesDirectory)/NOP-4.60/**/*.sln'
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration) - NOP 4.60'
+  condition: and(succeeded(), eq('${{ variables.build_4_60 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -129,24 +137,28 @@ steps:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.30/**/CustomPlugins/**/*.Tests.csproj'
   displayName: dotnet test - NOP 4.30
+  condition: and(succeeded(), eq('${{ variables.build_4_30 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.40/**/CustomPlugins/**/*.Tests.csproj'
   displayName: dotnet test - NOP 4.40
+  condition: and(succeeded(), eq('${{ variables.build_4_40 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.50/**/CustomPlugins/**/*.Tests.csproj'
   displayName: dotnet test - NOP 4.50
+  condition: and(succeeded(), eq('${{ variables.build_4_50 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
    command: test
    projects: '$(Build.SourcesDirectory)/NOP-4.60/**/CustomPlugins/**/*.Tests.csproj'
   displayName: dotnet test - NOP 4.60
+  condition: and(succeeded(), eq('${{ variables.build_4_60 }}', true))
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -156,15 +168,19 @@ steps:
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.30/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.30'
+  condition: and(succeeded(), eq('${{ variables.build_4_30 }}', true))
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.40/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.40/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.40'
+  condition: and(succeeded(), eq('${{ variables.build_4_40 }}', true))
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.50/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.50/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.50'
+  condition: and(succeeded(), eq('${{ variables.build_4_50 }}', true))
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.60/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.60/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.60'
+  condition: and(succeeded(), eq('${{ variables.build_4_60 }}', true))
 
 - powershell: If (!(Test-Path '$(Build.ArtifactStagingDirectory)/4.70/Admin.ScheduleTaskLog')) { New-Item -Path '$(Build.ArtifactStagingDirectory)/4.70/Admin.ScheduleTaskLog' -ItemType Directory }
   displayName: 'Check and create directory - 4.70'
@@ -174,15 +190,19 @@ steps:
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.30\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.30\Admin.ScheduleTaskLog' -Recurse
   displayName: 'Copy plugin - 4.30'
+  condition: and(succeeded(), eq('${{ variables.build_4_30 }}', true))
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.40\src\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.40\Admin.ScheduleTaskLog' -Recurse
   displayName: 'Copy plugin - 4.40'
+  condition: and(succeeded(), eq('${{ variables.build_4_40 }}', true))
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.50\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.50\Admin.ScheduleTaskLog' -Recurse
   displayName: 'Copy plugin - 4.50'
+  condition: and(succeeded(), eq('${{ variables.build_4_50 }}', true))
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.60\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.60\Admin.ScheduleTaskLog' -Recurse
   displayName: 'Copy plugin - 4.60'
+  condition: and(succeeded(), eq('${{ variables.build_4_60 }}', true))
 
 - powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-4.70\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\4.70\Admin.ScheduleTaskLog' -Recurse
   displayName: 'Copy plugin - 4.70'
