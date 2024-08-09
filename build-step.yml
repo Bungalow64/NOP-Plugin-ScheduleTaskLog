@@ -1,6 +1,10 @@
 parameters:
   - name: version
     type: string
+  - name: pluginFolder
+    type: string
+  - name: pluginSystemName
+    type: string
 
 steps:
 - task: DotNetCoreCLI@2
@@ -13,17 +17,17 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
    command: test
-   projects: '$(Build.SourcesDirectory)/NOP-${{ parameters.version }}/**/CustomPlugins/**/*.Tests.csproj'
+   projects: '$(Build.SourcesDirectory)/NOP-${{ parameters.version }}/**/CustomPlugins/${{ parameters.pluginFolder }}/**/*.Tests.csproj'
   displayName: 'dotnet test - NOP ${{ parameters.version }}'
 
 - powershell: |
-    If (!(Test-Path '$(Build.ArtifactStagingDirectory)/${{ parameters.version }}/Admin.ScheduleTaskLog')) {
-        New-Item -Path '$(Build.ArtifactStagingDirectory)/${{ parameters.version }}/Admin.ScheduleTaskLog' -ItemType Directory
+    If (!(Test-Path '$(Build.ArtifactStagingDirectory)/${{ parameters.version }}/${{ parameters.pluginSystemName }}')) {
+        New-Item -Path '$(Build.ArtifactStagingDirectory)/${{ parameters.version }}/${{ parameters.pluginSystemName }' -ItemType Directory
     }
   displayName: 'Check and create directory - ${{ parameters.version }}'
 
 - powershell: |
-    Copy-Item -Path '$(Build.SourcesDirectory)\NOP-${{ parameters.version }}\Presentation\Nop.Web\Plugins\Admin.ScheduleTaskLog\*' -Destination '$(Build.ArtifactStagingDirectory)\${{ parameters.version }}\Admin.ScheduleTaskLog' -Recurse
+    Copy-Item -Path '$(Build.SourcesDirectory)\NOP-${{ parameters.version }}\Presentation\Nop.Web\Plugins\${{ parameters.pluginSystemName }\*' -Destination '$(Build.ArtifactStagingDirectory)\${{ parameters.version }}\${{ parameters.pluginSystemName }' -Recurse
   displayName: 'Copy plugin - ${{ parameters.version }}'
 
 - powershell: Remove-Item -Recurse -Force $(Build.SourcesDirectory)\NOP-${{ parameters.version }}

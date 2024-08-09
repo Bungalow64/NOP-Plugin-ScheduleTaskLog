@@ -30,6 +30,9 @@ trigger:
 
 variables:
   buildConfiguration: 'Release'
+  pluginFolder: 'Nop.Plugin.Admin.ScheduleTaskLog'
+  pluginSystemName: 'Admin.ScheduleTaskLog'
+  githubProjectName: 'NOP-Plugin-ScheduleTaskLog'
   build_4_30: true
   build_4_40: true
   build_4_50: true
@@ -93,34 +96,44 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '6.0.x'
-
-- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\NOP-Plugin-ScheduleTaskLog\package\uploadedItems.json' -Destination '$(Build.ArtifactStagingDirectory)'
+    
+- powershell: Copy-Item -Path '$(Build.SourcesDirectory)\$(githubProjectName)\package\uploadedItems.json' -Destination '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy manifest file'
 
 - template: steps-template.yml
   parameters:
     version: '4.30'
-  condition: and(succeeded(), eq('${{ variables.build_4_30 }}', true))
+    pluginFolder: $(Build.pluginFolder)
+    pluginSystemName: $(Build.pluginSystemName)
+  condition: and(succeeded(), eq(variables['build_4_30'], true))
 
 - template: steps-template.yml
   parameters:
     version: '4.40'
-  condition: and(succeeded(), eq('${{ variables.build_4_40 }}', true))
+    pluginFolder: $(Build.pluginFolder)
+    pluginSystemName: $(Build.pluginSystemName)
+  condition: and(succeeded(), eq(variables['build_4_40'], true))
 
 - template: steps-template.yml
   parameters:
     version: '4.50'
-  condition: and(succeeded(), eq('${{ variables.build_4_50 }}', true))
+    pluginFolder: $(Build.pluginFolder)
+    pluginSystemName: $(Build.pluginSystemName)
+  condition: and(succeeded(), eq(variables['build_4_50'], true))
 
 - template: steps-template.yml
   parameters:
     version: '4.60'
-  condition: and(succeeded(), eq('${{ variables.build_4_60 }}', true))
+    pluginFolder: $(Build.pluginFolder)
+    pluginSystemName: $(Build.pluginSystemName)
+  condition: and(succeeded(), eq(variables['build_4_60'], true))
 
 - template: steps-template.yml
   parameters:
     version: '4.70'
-  condition: and(succeeded(), eq('${{ variables.build_4_70 }}', true))
+    pluginFolder: $(Build.pluginFolder)
+    pluginSystemName: $(Build.pluginSystemName)
+  condition: and(succeeded(), eq(variables['build_4_70'], true))
 
 - powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
   displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
@@ -130,10 +143,10 @@ steps:
   inputs:
     rootFolderOrFile: $(Build.ArtifactStagingDirectory)
     includeRootFolder: false
-    archiveFile: '$(Build.ArtifactStagingDirectory)\Admin.ScheduleTaskLog_$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)\$(Build.pluginSystemName)_$(Build.BuildId).zip'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish zip file'
   inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)\Admin.ScheduleTaskLog_$(Build.BuildId).zip'
+    pathToPublish: '$(Build.ArtifactStagingDirectory)\$(Build.pluginSystemName)(Build.BuildId).zip'
     ArtifactName: GeneratedPackage
