@@ -104,36 +104,36 @@ steps:
     - template: build-step.yml
       parameters:
         version: '4.30'
-        pluginFolder: '$(Build.pluginFolder)'
-        pluginSystemName: '$(Build.pluginSystemName)'
+        pluginFolder: ${{ variables.pluginFolder }}
+        pluginSystemName: ${{ variables.pluginSystemName }}
         
 - ${{ if eq(variables['build_4_40'], true) }}:
     - template: build-step.yml
       parameters:
         version: '4.40'
-        pluginFolder: '$(Build.pluginFolder)'
-        pluginSystemName: '$(Build.pluginSystemName)'
+        pluginFolder: ${{ variables.pluginFolder }}
+        pluginSystemName: ${{ variables.pluginSystemName }}
         
 - ${{ if eq(variables['build_4_50'], true) }}:
     - template: build-step.yml
       parameters:
         version: '4.50'
-        pluginFolder: '$(Build.pluginFolder)'
-        pluginSystemName: '$(Build.pluginSystemName)'
+        pluginFolder: ${{ variables.pluginFolder }}
+        pluginSystemName: ${{ variables.pluginSystemName }}
         
 - ${{ if eq(variables['build_4_60'], true) }}:
     - template: build-step.yml
       parameters:
         version: '4.60'
-        pluginFolder: '$(Build.pluginFolder)'
-        pluginSystemName: '$(Build.pluginSystemName)'
+        pluginFolder: ${{ variables.pluginFolder }}
+        pluginSystemName: ${{ variables.pluginSystemName }}
         
 - ${{ if eq(variables['build_4_70'], true) }}:
     - template: build-step.yml
       parameters:
         version: '4.70'
-        pluginFolder: '$(Build.pluginFolder)'
-        pluginSystemName: '$(Build.pluginSystemName)'
+        pluginFolder: ${{ variables.pluginFolder }}
+        pluginSystemName: ${{ variables.pluginSystemName }}
 
 - powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
   displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
