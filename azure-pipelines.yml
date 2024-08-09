@@ -106,6 +106,7 @@ steps:
         version: '4.30'
         pluginFolder: ${{ variables.pluginFolder }}
         pluginSystemName: ${{ variables.pluginSystemName }}
+        subfolder: ''
         
 - ${{ if eq(variables['build_4_40'], true) }}:
     - template: build-step.yml
@@ -113,6 +114,7 @@ steps:
         version: '4.40'
         pluginFolder: ${{ variables.pluginFolder }}
         pluginSystemName: ${{ variables.pluginSystemName }}
+        subfolder: '\src'
         
 - ${{ if eq(variables['build_4_50'], true) }}:
     - template: build-step.yml
@@ -120,6 +122,7 @@ steps:
         version: '4.50'
         pluginFolder: ${{ variables.pluginFolder }}
         pluginSystemName: ${{ variables.pluginSystemName }}
+        subfolder: ''
         
 - ${{ if eq(variables['build_4_60'], true) }}:
     - template: build-step.yml
@@ -127,6 +130,7 @@ steps:
         version: '4.60'
         pluginFolder: ${{ variables.pluginFolder }}
         pluginSystemName: ${{ variables.pluginSystemName }}
+        subfolder: ''
         
 - ${{ if eq(variables['build_4_70'], true) }}:
     - template: build-step.yml
@@ -134,6 +138,7 @@ steps:
         version: '4.70'
         pluginFolder: ${{ variables.pluginFolder }}
         pluginSystemName: ${{ variables.pluginSystemName }}
+        subfolder: ''
 
 - powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
   displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
