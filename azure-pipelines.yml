@@ -143,10 +143,10 @@ steps:
   inputs:
     rootFolderOrFile: $(Build.ArtifactStagingDirectory)
     includeRootFolder: false
-    archiveFile: '$(Build.ArtifactStagingDirectory)\$(Build.pluginSystemName)_$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)\$(pluginSystemName)_$(Build.BuildId).zip'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish zip file'
   inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)\$(Build.pluginSystemName)(Build.BuildId).zip'
+    pathToPublish: '$(Build.ArtifactStagingDirectory)\$(pluginSystemName)_$(Build.BuildId).zip'
     ArtifactName: GeneratedPackage

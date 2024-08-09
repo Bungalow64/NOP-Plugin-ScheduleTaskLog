@@ -25,6 +25,9 @@ steps:
         New-Item -Path '$(Build.ArtifactStagingDirectory)/${{ parameters.version }}/${{ parameters.pluginSystemName }}' -ItemType Directory
     }
   displayName: 'Check and create directory - ${{ parameters.version }}'
+  
+- powershell: Get-ChildItem -Path '$(Build.ArtifactStagingDirectory)' -recurse
+  displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
 
 - powershell: |
     Copy-Item -Path '$(Build.SourcesDirectory)\NOP-${{ parameters.version }}\Presentation\Nop.Web\Plugins\${{ parameters.pluginSystemName }}\*' -Destination '$(Build.ArtifactStagingDirectory)\${{ parameters.version }}\${{ parameters.pluginSystemName }}' -Recurse
