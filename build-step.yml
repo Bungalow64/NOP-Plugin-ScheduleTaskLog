@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: pluginSystemName
     type: string
+  - name: subfolder
+    type: string
 
 steps:
 - task: DotNetCoreCLI@2
@@ -30,7 +32,7 @@ steps:
   displayName: 'List contents of $(Build.ArtifactStagingDirectory)'
 
 - powershell: |
-    Copy-Item -Path '$(Build.SourcesDirectory)\NOP-${{ parameters.version }}\Presentation\Nop.Web\Plugins\${{ parameters.pluginSystemName }}\*' -Destination '$(Build.ArtifactStagingDirectory)\${{ parameters.version }}\${{ parameters.pluginSystemName }}' -Recurse
+    Copy-Item -Path '$(Build.SourcesDirectory)\NOP-${{ parameters.version }}${{ parameters.subfolder }}\Presentation\Nop.Web\Plugins\${{ parameters.pluginSystemName }}\*' -Destination '$(Build.ArtifactStagingDirectory)\${{ parameters.version }}\${{ parameters.pluginSystemName }}' -Recurse
   displayName: 'Copy plugin - ${{ parameters.version }}'
 
 - powershell: Remove-Item -Recurse -Force $(Build.SourcesDirectory)\NOP-${{ parameters.version }}
