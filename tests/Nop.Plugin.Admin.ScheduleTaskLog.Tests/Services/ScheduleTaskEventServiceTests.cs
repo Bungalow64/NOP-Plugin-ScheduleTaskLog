@@ -114,14 +114,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Setup(p => p.ErrorAsync(It.IsAny<string>(), It.IsAny<Exception>(), null))
                 .Callback<string, Exception, Customer>((p, q, r) =>
                 {
-                    Assert.AreEqual("Cannot log the start of the schedule task event", p);
-                    Assert.NotNull(q);
+                    ClassicAssert.AreEqual("Cannot log the start of the schedule task event", p);
+                    ClassicAssert.NotNull(q);
                 })
                 .Returns(Task.CompletedTask);
 
             var result = await Create().RecordEventStartAsync(task, customerId);
 
-            Assert.Null(result);
+            ClassicAssert.Null(result);
 
             _logger
                 .Verify(p => p.ErrorAsync(It.IsAny<string>(), It.IsAny<Exception>(), null), Times.Once);
@@ -141,10 +141,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var scheduleTaskEvent = await Create().RecordEventStartAsync(task, customerId);
 
-            Assert.NotNull(scheduleTaskEvent);
-            Assert.AreEqual(taskId, scheduleTaskEvent.ScheduleTaskId);
-            Assert.False(scheduleTaskEvent.IsStartedManually);
-            Assert.Null(scheduleTaskEvent.TriggeredByCustomerId);
+            ClassicAssert.NotNull(scheduleTaskEvent);
+            ClassicAssert.AreEqual(taskId, scheduleTaskEvent.ScheduleTaskId);
+            ClassicAssert.False(scheduleTaskEvent.IsStartedManually);
+            ClassicAssert.Null(scheduleTaskEvent.TriggeredByCustomerId);
         }
 
         [Test]
@@ -161,10 +161,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var scheduleTaskEvent = await Create().RecordEventStartAsync(task, customerId);
 
-            Assert.NotNull(scheduleTaskEvent);
-            Assert.AreEqual(taskId, scheduleTaskEvent.ScheduleTaskId);
-            Assert.True(scheduleTaskEvent.IsStartedManually);
-            Assert.AreEqual(customerId, scheduleTaskEvent.TriggeredByCustomerId);
+            ClassicAssert.NotNull(scheduleTaskEvent);
+            ClassicAssert.AreEqual(taskId, scheduleTaskEvent.ScheduleTaskId);
+            ClassicAssert.True(scheduleTaskEvent.IsStartedManually);
+            ClassicAssert.AreEqual(customerId, scheduleTaskEvent.TriggeredByCustomerId);
         }
 
         #endregion
@@ -178,7 +178,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().RecordEventEndAsync(scheduleTaskEvent);
 
-            Assert.Null(result);
+            ClassicAssert.Null(result);
         }
 
         [Test]
@@ -190,8 +190,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Setup(p => p.ErrorAsync(It.IsAny<string>(), It.IsAny<Exception>(), null))
                 .Callback<string, Exception, Customer>((p, q, r) =>
                 {
-                    Assert.AreEqual("Cannot log the end of the schedule task event", p);
-                    Assert.IsInstanceOf<InvalidOperationException>(q);
+                    ClassicAssert.AreEqual("Cannot log the end of the schedule task event", p);
+                    ClassicAssert.IsInstanceOf<InvalidOperationException>(q);
                 })
                 .Returns(Task.CompletedTask);
 
@@ -201,7 +201,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().RecordEventEndAsync(scheduleTaskEvent);
 
-            Assert.Null(result);
+            ClassicAssert.Null(result);
 
             _logger
                 .Verify(p => p.ErrorAsync(It.IsAny<string>(), It.IsAny<Exception>(), null), Times.Once);
@@ -221,19 +221,19 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Setup(p => p.InsertAsync(It.IsAny<ScheduleTaskEvent>(), true))
                 .Callback<ScheduleTaskEvent, bool>((p, q) =>
                 {
-                    Assert.NotNull(p);
-                    Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), p.EventStartDateUtc);
-                    Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), p.EventEndDateUtc);
-                    Assert.AreEqual(3000, p.TotalMilliseconds);
+                    ClassicAssert.NotNull(p);
+                    ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), p.EventStartDateUtc);
+                    ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), p.EventEndDateUtc);
+                    ClassicAssert.AreEqual(3000, p.TotalMilliseconds);
                 })
                 .Returns(Task.CompletedTask);
 
             var result = await Create().RecordEventEndAsync(scheduleTaskEvent);
 
-            Assert.NotNull(result);
-            Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), result.EventStartDateUtc);
-            Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), result.EventEndDateUtc);
-            Assert.AreEqual(3000, result.TotalMilliseconds);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), result.EventStartDateUtc);
+            ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), result.EventEndDateUtc);
+            ClassicAssert.AreEqual(3000, result.TotalMilliseconds);
 
             _scheduleTaskEventRepository
                 .Verify(p => p.InsertAsync(It.IsAny<ScheduleTaskEvent>(), true), Times.Once);
@@ -253,7 +253,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().RecordEventErrorAsync(scheduleTaskEvent, BuildException());
 
-            Assert.Null(result);
+            ClassicAssert.Null(result);
         }
 
         [Test]
@@ -265,8 +265,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Setup(p => p.ErrorAsync(It.IsAny<string>(), It.IsAny<Exception>(), null))
                 .Callback<string, Exception, Customer>((p, q, r) =>
                 {
-                    Assert.AreEqual("Cannot log the error of the schedule task event", p);
-                    Assert.IsInstanceOf<InvalidOperationException>(q);
+                    ClassicAssert.AreEqual("Cannot log the error of the schedule task event", p);
+                    ClassicAssert.IsInstanceOf<InvalidOperationException>(q);
                 })
                 .Returns(Task.CompletedTask);
 
@@ -276,7 +276,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().RecordEventErrorAsync(scheduleTaskEvent, BuildException());
 
-            Assert.Null(result);
+            ClassicAssert.Null(result);
 
             _logger
                 .Verify(p => p.ErrorAsync(It.IsAny<string>(), It.IsAny<Exception>(), null), Times.Once);
@@ -296,21 +296,21 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Setup(p => p.InsertAsync(It.IsAny<ScheduleTaskEvent>(), true))
                 .Callback<ScheduleTaskEvent, bool>((p, q) =>
                 {
-                    Assert.NotNull(p);
-                    Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), p.EventStartDateUtc);
-                    Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), p.EventEndDateUtc);
-                    Assert.AreEqual(3000, p.TotalMilliseconds);
-                    Assert.AreEqual("Operation is not valid due to the current state of the object.", p.ExceptionMessage);
+                    ClassicAssert.NotNull(p);
+                    ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), p.EventStartDateUtc);
+                    ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), p.EventEndDateUtc);
+                    ClassicAssert.AreEqual(3000, p.TotalMilliseconds);
+                    ClassicAssert.AreEqual("Operation is not valid due to the current state of the object.", p.ExceptionMessage);
                 })
                 .Returns(Task.CompletedTask);
 
             var result = await Create().RecordEventErrorAsync(scheduleTaskEvent, BuildException());
 
-            Assert.NotNull(result);
-            Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), result.EventStartDateUtc);
-            Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), result.EventEndDateUtc);
-            Assert.AreEqual(3000, result.TotalMilliseconds);
-            Assert.AreEqual("Operation is not valid due to the current state of the object.", result.ExceptionMessage);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), result.EventStartDateUtc);
+            ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:03"), result.EventEndDateUtc);
+            ClassicAssert.AreEqual(3000, result.TotalMilliseconds);
+            ClassicAssert.AreEqual("Operation is not valid due to the current state of the object.", result.ExceptionMessage);
 
             _scheduleTaskEventRepository
                 .Verify(p => p.InsertAsync(It.IsAny<ScheduleTaskEvent>(), true), Times.Once);
@@ -344,7 +344,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             _scheduleTaskRepository
                 .Setup(p => p.GetAllAsync(
                     It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(),
-                    It.IsAny<Func<IStaticCacheManager, CacheKey>>(),
+                    It.IsAny<Func<ICacheKeyService, CacheKey>>(),
                     It.IsAny<bool>()))
                 .Returns(Task.FromResult(tasks));
         }
@@ -354,7 +354,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
         {
             ScheduleLogSearchModel model = null;
 
-            Assert.ThrowsAsync<ArgumentNullException>(() => Create().PrepareLogListModelAsync(model));
+            ClassicAssert.ThrowsAsync<ArgumentNullException>(() => Create().PrepareLogListModelAsync(model));
         }
 
         [Test]
@@ -415,16 +415,16 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(3, results.Data.Count());
+            ClassicAssert.AreEqual(3, results.Data.Count());
 
             var foundItems = results.Data.ToList();
 
-            Assert.AreEqual(1003, foundItems[0].Id);
-            Assert.AreEqual("Task2", foundItems[0].TaskName);
-            Assert.AreEqual(1002, foundItems[1].Id);
-            Assert.AreEqual("Task2", foundItems[1].TaskName);
-            Assert.AreEqual(1001, foundItems[2].Id);
-            Assert.AreEqual("Task1", foundItems[2].TaskName);
+            ClassicAssert.AreEqual(1003, foundItems[0].Id);
+            ClassicAssert.AreEqual("Task2", foundItems[0].TaskName);
+            ClassicAssert.AreEqual(1002, foundItems[1].Id);
+            ClassicAssert.AreEqual("Task2", foundItems[1].TaskName);
+            ClassicAssert.AreEqual(1001, foundItems[2].Id);
+            ClassicAssert.AreEqual("Task1", foundItems[2].TaskName);
         }
 
         [Test]
@@ -490,11 +490,11 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(expectedItems, results.Data.Count());
+            ClassicAssert.AreEqual(expectedItems, results.Data.Count());
 
             if (expectedName is not null)
             {
-                Assert.True(results.Data.All(p => p.TaskName == expectedName));
+                ClassicAssert.True(results.Data.All(p => p.TaskName == expectedName));
             }
         }
 
@@ -558,10 +558,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(expectedItems, results.Data.Count());
+            ClassicAssert.AreEqual(expectedItems, results.Data.Count());
             if (expectedIsError.HasValue)
             {
-                Assert.True(results.Data.All(p => p.IsError == expectedIsError));
+                ClassicAssert.True(results.Data.All(p => p.IsError == expectedIsError));
             }
         }
 
@@ -625,10 +625,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(expectedItems, results.Data.Count());
+            ClassicAssert.AreEqual(expectedItems, results.Data.Count());
             if (expectedIsManual.HasValue)
             {
-                Assert.True(results.Data.All(p => p.IsStartedManually == expectedIsManual));
+                ClassicAssert.True(results.Data.All(p => p.IsStartedManually == expectedIsManual));
             }
         }
 
@@ -701,7 +701,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(expectedItems, results.Data.Count());
+            ClassicAssert.AreEqual(expectedItems, results.Data.Count());
         }
 
         [Test]
@@ -773,7 +773,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(expectedItems, results.Data.Count());
+            ClassicAssert.AreEqual(expectedItems, results.Data.Count());
         }
 
         [Test]
@@ -828,12 +828,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             var results = await Create().PrepareLogListModelAsync(model);
 
 
-            Assert.AreEqual(2, results.Data.Count());
+            ClassicAssert.AreEqual(2, results.Data.Count());
 
             var foundItems = results.Data.ToList();
 
-            Assert.AreEqual(expectedFirstId, foundItems[0].Id);
-            Assert.AreNotEqual(expectedFirstId, foundItems[1].Id);
+            ClassicAssert.AreEqual(expectedFirstId, foundItems[0].Id);
+            ClassicAssert.AreNotEqual(expectedFirstId, foundItems[1].Id);
         }
 
         [Test]
@@ -904,14 +904,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(expectedCount, results.Data.Count());
+            ClassicAssert.AreEqual(expectedCount, results.Data.Count());
 
             var foundItems = results.Data.ToList();
 
             if (expectedFirstId.HasValue)
             {
-                Assert.AreEqual(expectedFirstId, foundItems.First().Id);
-                Assert.AreEqual(expectedLastId, foundItems.Last().Id);
+                ClassicAssert.AreEqual(expectedFirstId, foundItems.First().Id);
+                ClassicAssert.AreEqual(expectedLastId, foundItems.Last().Id);
             }
         }
 
@@ -982,14 +982,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(2, results.Data.Count());
+            ClassicAssert.AreEqual(2, results.Data.Count());
 
             var foundItems = results.Data.ToList();
 
-            Assert.AreEqual(1001, foundItems[1].Id);
-            Assert.AreEqual(expectedTask1Average, foundItems[1].TimeAgainstAverage);
-            Assert.AreEqual(1002, foundItems[0].Id);
-            Assert.AreEqual(expectedTask2Average, foundItems[0].TimeAgainstAverage);
+            ClassicAssert.AreEqual(1001, foundItems[1].Id);
+            ClassicAssert.AreEqual(expectedTask1Average, foundItems[1].TimeAgainstAverage);
+            ClassicAssert.AreEqual(1002, foundItems[0].Id);
+            ClassicAssert.AreEqual(expectedTask2Average, foundItems[0].TimeAgainstAverage);
         }
 
         [Test]
@@ -1050,14 +1050,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var results = await Create().PrepareLogListModelAsync(model);
 
-            Assert.AreEqual(2, results.Data.Count());
+            ClassicAssert.AreEqual(2, results.Data.Count());
 
             var foundItems = results.Data.ToList();
 
-            Assert.AreEqual(1001, foundItems[1].Id);
-            Assert.AreEqual(-50, foundItems[1].TimeAgainstAverage);
-            Assert.AreEqual(1002, foundItems[0].Id);
-            Assert.AreEqual(0, foundItems[0].TimeAgainstAverage);
+            ClassicAssert.AreEqual(1001, foundItems[1].Id);
+            ClassicAssert.AreEqual(-50, foundItems[1].TimeAgainstAverage);
+            ClassicAssert.AreEqual(1002, foundItems[0].Id);
+            ClassicAssert.AreEqual(0, foundItems[0].TimeAgainstAverage);
         }
 
         #endregion
@@ -1070,12 +1070,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             const int id = 1001;
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
+                .Setup(p => p.GetByIdAsync(id, null, true, false))
                 .ReturnsAsync((ScheduleTaskEvent)null);
 
             var result = await Create().GetScheduleTaskEventByIdAsync(id);
 
-            Assert.Null(result);
+            ClassicAssert.Null(result);
         }
 
         [Test]
@@ -1116,19 +1116,19 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             };
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
+                .Setup(p => p.GetByIdAsync(id, null, true, false))
                     .ReturnsAsync(scheduleTaskEvent);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true))
+                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true, false))
                     .ReturnsAsync(scheduleTasks[0]);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetByIdAsync(scheduleTaskId2, null, true))
+                .Setup(p => p.GetByIdAsync(scheduleTaskId2, null, true, false))
                     .ReturnsAsync(scheduleTasks[1]);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
+                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<ICacheKeyService, CacheKey>>(), true))
                     .ReturnsAsync(scheduleTasks);
 
             _scheduleTaskEventRepository
@@ -1141,14 +1141,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().GetScheduleTaskEventByIdAsync(id);
 
-            Assert.NotNull(result);
-            Assert.AreEqual(id, result.Id);
-            Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:02"), result.EventEndDateUtc);
-            Assert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), result.EventStartDateUtc);
-            Assert.False(result.IsError);
-            Assert.AreEqual("Task1", result.TaskName);
-            Assert.AreEqual(0, result.TimeAgainstAverage);
-            Assert.AreEqual(2000, result.TotalMilliseconds);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.AreEqual(id, result.Id);
+            ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:02"), result.EventEndDateUtc);
+            ClassicAssert.AreEqual(DateTime.Parse("02-Mar-2021 09:30:00"), result.EventStartDateUtc);
+            ClassicAssert.False(result.IsError);
+            ClassicAssert.AreEqual("Task1", result.TaskName);
+            ClassicAssert.AreEqual(0, result.TimeAgainstAverage);
+            ClassicAssert.AreEqual(2000, result.TotalMilliseconds);
         }
 
         [Test]
@@ -1184,15 +1184,15 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             };
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
+                .Setup(p => p.GetByIdAsync(id, null, true, false))
                     .ReturnsAsync(scheduleTaskEvent);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true))
+                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true, false))
                     .ReturnsAsync(scheduleTasks[0]);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
+                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<ICacheKeyService, CacheKey>>(), true))
                     .ReturnsAsync(scheduleTasks);
 
             _scheduleTaskEventRepository
@@ -1201,10 +1201,10 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().GetScheduleTaskEventByIdAsync(id);
 
-            Assert.NotNull(result);
-            Assert.True(result.IsError);
-            Assert.AreEqual("Error Details1", result.ExceptionDetails);
-            Assert.AreEqual("Error Message1", result.ExceptionMessage);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.True(result.IsError);
+            ClassicAssert.AreEqual("Error Details1", result.ExceptionDetails);
+            ClassicAssert.AreEqual("Error Message1", result.ExceptionMessage);
         }
 
         [Test]
@@ -1253,15 +1253,15 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             };
 
             _scheduleTaskEventRepository
-                .Setup(p => p.GetByIdAsync(id, null, true))
+                .Setup(p => p.GetByIdAsync(id, null, true, false))
                     .ReturnsAsync(scheduleTaskEvent1);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true))
+                .Setup(p => p.GetByIdAsync(scheduleTaskId1, null, true, false))
                     .ReturnsAsync(scheduleTasks[0]);
 
             _scheduleTaskRepository
-                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<IStaticCacheManager, CacheKey>>(), true))
+                .Setup(p => p.GetAllAsync(It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(), It.IsAny<Func<ICacheKeyService, CacheKey>>(), true))
                     .ReturnsAsync(scheduleTasks);
 
             _scheduleTaskEventRepository
@@ -1274,8 +1274,8 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var result = await Create().GetScheduleTaskEventByIdAsync(id);
 
-            Assert.NotNull(result);
-            Assert.AreEqual(expectedTimeAgaistAverage, result.TimeAgainstAverage);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.AreEqual(expectedTimeAgaistAverage, result.TimeAgainstAverage);
         }
 
         #endregion
@@ -1319,18 +1319,18 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
             _scheduleTaskRepository
                 .Setup(p => p.GetAllAsync(
                     It.IsAny<Func<IQueryable<ScheduleTask>, IQueryable<ScheduleTask>>>(),
-                    It.IsAny<Func<IStaticCacheManager, CacheKey>>(),
+                    It.IsAny<Func<ICacheKeyService, CacheKey>>(),
                     It.IsAny<bool>()))
                 .Returns(Task.FromResult(tasks));
 
             var availableTasks = await Create().GetAvailableTasksAsync();
 
-            Assert.NotNull(availableTasks);
-            Assert.AreEqual(2, availableTasks.Count);
-            Assert.AreEqual("1001", availableTasks[0].Value);
-            Assert.AreEqual("Task1", availableTasks[0].Text);
-            Assert.AreEqual("1002", availableTasks[1].Value);
-            Assert.AreEqual("Task2", availableTasks[1].Text);
+            ClassicAssert.NotNull(availableTasks);
+            ClassicAssert.AreEqual(2, availableTasks.Count);
+            ClassicAssert.AreEqual("1001", availableTasks[0].Value);
+            ClassicAssert.AreEqual("Task1", availableTasks[0].Text);
+            ClassicAssert.AreEqual("1002", availableTasks[1].Value);
+            ClassicAssert.AreEqual("Task2", availableTasks[1].Text);
         }
 
         #endregion
@@ -1364,12 +1364,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var availableTasks = await Create().GetAvailableStatesAsync();
 
-            Assert.NotNull(availableTasks);
-            Assert.AreEqual(2, availableTasks.Count);
-            Assert.AreEqual("1", availableTasks[0].Value);
-            Assert.AreEqual("Success1", availableTasks[0].Text);
-            Assert.AreEqual("2", availableTasks[1].Value);
-            Assert.AreEqual("Error1", availableTasks[1].Text);
+            ClassicAssert.NotNull(availableTasks);
+            ClassicAssert.AreEqual(2, availableTasks.Count);
+            ClassicAssert.AreEqual("1", availableTasks[0].Value);
+            ClassicAssert.AreEqual("Success1", availableTasks[0].Text);
+            ClassicAssert.AreEqual("2", availableTasks[1].Value);
+            ClassicAssert.AreEqual("Error1", availableTasks[1].Text);
         }
 
         #endregion
@@ -1403,12 +1403,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
 
             var availableTasks = await Create().GetAvailableTriggerTypesAsync();
 
-            Assert.NotNull(availableTasks);
-            Assert.AreEqual(2, availableTasks.Count);
-            Assert.AreEqual("1", availableTasks[0].Value);
-            Assert.AreEqual("ByScheduler1", availableTasks[0].Text);
-            Assert.AreEqual("2", availableTasks[1].Value);
-            Assert.AreEqual("ByUser1", availableTasks[1].Text);
+            ClassicAssert.NotNull(availableTasks);
+            ClassicAssert.AreEqual(2, availableTasks.Count);
+            ClassicAssert.AreEqual("1", availableTasks[0].Value);
+            ClassicAssert.AreEqual("ByScheduler1", availableTasks[0].Text);
+            ClassicAssert.AreEqual("2", availableTasks[1].Value);
+            ClassicAssert.AreEqual("ByUser1", availableTasks[1].Text);
         }
 
         #endregion
@@ -1457,9 +1457,9 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Services
                 .Callback<Expression<Func<ScheduleTaskEvent, bool>>>(p =>
                 {
                     var deleted = scheduledTaskEvents.Where(p).ToList();
-                    Assert.AreEqual(2, deleted.Count);
-                    Assert.AreEqual(1001, deleted[0].Id);
-                    Assert.AreEqual(1002, deleted[1].Id);
+                    ClassicAssert.AreEqual(2, deleted.Count);
+                    ClassicAssert.AreEqual(1001, deleted[0].Id);
+                    ClassicAssert.AreEqual(1002, deleted[1].Id);
                 })
                 .Returns(Task.FromResult(1));
 

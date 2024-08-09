@@ -81,12 +81,12 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
 
             var result = await Create().RunNow(1001);
 
-            Assert.NotNull(result);
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.IsInstanceOf<RedirectToActionResult>(result);
 
             var castResult = (RedirectToActionResult)result;
-            Assert.AreEqual("AccessDenied", castResult.ActionName);
-            Assert.AreEqual("Security", castResult.ControllerName);
+            ClassicAssert.AreEqual("AccessDenied", castResult.ActionName);
+            ClassicAssert.AreEqual("Security", castResult.ControllerName);
         }
 
         [Test]
@@ -112,14 +112,14 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
 
             var result = await Create().RunNow(id);
 
-            Assert.NotNull(result);
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
+            ClassicAssert.NotNull(result);
+            ClassicAssert.IsInstanceOf<RedirectToActionResult>(result);
 
             var castResult = (RedirectToActionResult)result;
-            Assert.AreEqual("List", castResult.ActionName);
-            Assert.AreEqual("ScheduleTask", castResult.ControllerName);
-            Assert.True(castResult.RouteValues.ContainsKey("area"));
-            Assert.AreEqual("Admin", castResult.RouteValues["area"]);
+            ClassicAssert.AreEqual("List", castResult.ActionName);
+            ClassicAssert.AreEqual("ScheduleTask", castResult.ControllerName);
+            ClassicAssert.True(castResult.RouteValues.ContainsKey("area"));
+            ClassicAssert.AreEqual("Admin", castResult.RouteValues["area"]);
 
             _notificationService
                 .Verify(p => p.ErrorNotificationAsync(It.IsAny<Exception>(), true), Times.Once);
