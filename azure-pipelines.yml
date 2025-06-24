@@ -38,7 +38,7 @@ variables:
   pluginSystemName: 'Admin.ScheduleTaskLog'
   githubProjectName: 'NOP-Plugin-ScheduleTaskLog'
   build_4_30: false
-  build_4_40: true
+  build_4_40: false
   build_4_50: true
   build_4_60: true
   build_4_70: true
