@@ -42,6 +42,7 @@ variables:
   build_4_50: true
   build_4_60: true
   build_4_70: true
+  build_4_80: true
 
 pool:
  vmImage: 'ubuntu-latest'
