@@ -44,7 +44,7 @@ variables:
   build_4_70: true
 
 pool:
- vmImage: 'ubuntu-20.04'
+ vmImage: 'ubuntu-latest'
 
 steps:
 - checkout: Plugin
