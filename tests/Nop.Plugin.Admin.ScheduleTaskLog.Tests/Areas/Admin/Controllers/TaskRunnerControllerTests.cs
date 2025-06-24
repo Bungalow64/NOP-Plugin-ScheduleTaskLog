@@ -72,7 +72,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
         public async Task RunNow_NoPermission_AccessDenied()
         {
             _permissionService
-                .Setup(p => p.AuthorizeAsync(StandardPermissionProvider.ManageScheduleTasks))
+                .Setup(p => p.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
                 .ReturnsAsync(false);
 
             _webHelper
@@ -95,7 +95,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
             const int id = 1001;
 
             _permissionService
-                .Setup(p => p.AuthorizeAsync(StandardPermissionProvider.ManageScheduleTasks))
+                .Setup(p => p.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
                 .ReturnsAsync(true);
 
             _scheduleTaskService
