@@ -77,7 +77,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         [ValidateVendor]
         public virtual async Task<IActionResult> RunNow(int id)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageScheduleTasks))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }

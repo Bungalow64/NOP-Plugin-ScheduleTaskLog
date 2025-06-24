@@ -28,5 +28,11 @@
     "SupportedVersion": "4.70",
     "DirectoryPath": "4.70/Admin.ScheduleTaskLog/",
     "SystemName": "Admin.ScheduleTaskLog"
+  },
+  {
+    "Type": "Plugin",
+    "SupportedVersion": "4.80",
+    "DirectoryPath": "4.80/Admin.ScheduleTaskLog/",
+    "SystemName": "Admin.ScheduleTaskLog"
   }
 ]

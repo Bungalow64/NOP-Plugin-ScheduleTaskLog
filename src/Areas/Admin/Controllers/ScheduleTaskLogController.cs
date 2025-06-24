@@ -80,7 +80,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// <returns>The page</returns>
         public virtual async Task<IActionResult> List()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }
@@ -110,7 +110,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         [HttpPost]
         public virtual async Task<IActionResult> LogList(ScheduleLogSearchModel searchModel)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }
@@ -128,7 +128,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// <returns>The page containing the details of the requested event, or a redirection to the list page if the <paramref name="id"/> is not found</returns>
         public virtual async Task<IActionResult> View(int id)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }
@@ -150,7 +150,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         [FormValueRequired("clearall")]
         public virtual async Task<IActionResult> ClearAll()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSystemLog))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }
@@ -171,7 +171,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         /// <returns>Returns the configuration page</returns>
         public virtual async Task<IActionResult> Configure()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }
@@ -194,7 +194,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Areas.Admin.Controllers
         [AutoValidateAntiforgeryToken]
         public virtual async Task<IActionResult> Configure(ConfigurationModel model)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManagePlugins))
+            if (!await _permissionService.AuthorizeAsync(StandardPermission.Configuration.MANAGE_PLUGINS))
             {
                 return AccessDeniedView();
             }

@@ -1,5 +1,9 @@
 resources:
  repositories:
+   - repository: NOP_4_80
+     type: github
+     endpoint: Bungalow64
+     name: Bungalow64/NOP-4.80
    - repository: NOP_4_70
      type: github
      endpoint: Bungalow64
@@ -33,11 +37,12 @@ variables:
   pluginFolder: 'Nop.Plugin.Admin.ScheduleTaskLog'
   pluginSystemName: 'Admin.ScheduleTaskLog'
   githubProjectName: 'NOP-Plugin-ScheduleTaskLog'
-  build_4_30: true
-  build_4_40: true
+  build_4_30: false
+  build_4_40: false
   build_4_50: true
   build_4_60: true
   build_4_70: true
+  build_4_80: true
 
 pool:
  vmImage: 'ubuntu-latest'
@@ -66,6 +71,16 @@ steps:
   clean: true
   fetchDepth: 1
   submodules: true
+- checkout: NOP_4_80
+  clean: true
+  fetchDepth: 1
+  submodules: true
+  
+- task: UseDotNet@2
+  displayName: 'Use .NET 9 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.x'
   
 - task: UseDotNet@2
   displayName: 'Use .NET 8 SDK'
@@ -136,6 +151,14 @@ steps:
     - template: build-step.yml
       parameters:
         version: '4.70'
+        pluginFolder: ${{ variables.pluginFolder }}
+        pluginSystemName: ${{ variables.pluginSystemName }}
+        subfolder: ''
+        
+- ${{ if eq(variables['build_4_80'], true) }}:
+    - template: build-step.yml
+      parameters:
+        version: '4.80'
         pluginFolder: ${{ variables.pluginFolder }}
         pluginSystemName: ${{ variables.pluginSystemName }}
         subfolder: ''
