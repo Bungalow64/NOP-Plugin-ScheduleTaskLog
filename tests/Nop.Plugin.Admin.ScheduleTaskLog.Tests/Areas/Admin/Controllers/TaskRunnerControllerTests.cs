@@ -103,7 +103,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
                 .ReturnsAsync((ScheduleTask)null);
 
             _notificationService
-                .Setup(p => p.ErrorNotificationAsync(It.IsAny<Exception>(), true))
+                .Setup(p => p.ErrorNotificationAsync(It.IsAny<Exception>(), true, 0))
                 .Returns(Task.CompletedTask);
 
             _scheduleTaskEventService
@@ -122,7 +122,7 @@ namespace Nop.Plugin.Admin.ScheduleTaskLog.Tests.Areas.Admin.Controllers
             ClassicAssert.AreEqual("Admin", castResult.RouteValues["area"]);
 
             _notificationService
-                .Verify(p => p.ErrorNotificationAsync(It.IsAny<Exception>(), true), Times.Once);
+                .Verify(p => p.ErrorNotificationAsync(It.IsAny<Exception>(), true, 0), Times.Once);
 
             _scheduleTaskEventService
                 .Verify(p => p.RecordEventErrorAsync(It.IsAny<ScheduleTaskEvent>(), It.IsAny<Exception>()), Times.Never);
